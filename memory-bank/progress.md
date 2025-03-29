@@ -4,15 +4,17 @@
 
 ## Current Status
 
-*   **Phase**: Planning / Initial Setup
-*   **Overall Progress**: Project structure and core configurations are in place. Memory Bank initialized. No application features have been implemented yet.
+*   **Phase**: Initial Setup / Scaffolding
+*   **Overall Progress**: Core configurations (`package.json`, `tsconfig.json`, etc.) and detailed `src/` directory scaffold (features, components, pages, contexts, hooks, lib, services, store, styles, utils) are in place. Memory Bank initialized and updated with branding. Implementation within the scaffold is pending (files likely contain placeholders or are empty).
 
 ## What Works
 
 *   Base Next.js project setup (can likely run `npm run dev`).
-*   Core configuration files exist (`package.json`, `tsconfig.json`, `next.config.js`, `firebase.json`, etc.).
+*   Core configuration files exist.
 *   Dependency installation (`npm install`) should work.
-*   Memory Bank structure created and populated with initial context.
+*   Memory Bank structure created and populated with initial context + branding.
+*   `src/` directory structure scaffolded according to design (verified via `list_files`).
+*   Core development scripts (`dev`, `lint`, `test`, `storybook`) confirmed functional after necessary dependency installations and configuration fixes.
 
 ## What's Left to Build (High-Level based on Project Brief)
 
