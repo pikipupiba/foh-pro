@@ -1,0 +1,22 @@
+# Cline Rules for foh-pro (Windows Environment)
+
+This file contains rules, commands, paths, or configurations specific to the Windows development environment using PowerShell.
+
+## Environment Details
+
+*   **Operating System**: Windows 11
+*   **Default Shell**: PowerShell (pwsh)
+*   **Home Directory**: C:/Users/pikipupiba
+*   **Project Directory**: c:/Users/pikipupiba/Documents/GitHub/foh-pro
+
+## Windows-Specific Commands & Aliases
+
+*   *(Placeholder: Add any useful Windows/PowerShell specific commands or aliases here as they are identified. E.g., `ls` equivalent is `Get-ChildItem` or `dir`)*
+
+## Path Considerations
+
+*   *(Placeholder: Note any path differences or considerations when working on Windows vs. other OS)*
+
+## Tooling Configuration
+
+*   *(Placeholder: Document any Windows-specific setup for tools like Docker, Node.js version managers (like nvm-windows), etc.)*
