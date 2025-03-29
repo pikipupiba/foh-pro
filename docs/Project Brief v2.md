@@ -143,7 +143,7 @@
 ## **7. Rendering Approach**
 
 - **Goal**: Build a performant, modern web app that handles both **public-facing** content (informational/marketing) and **private, real-time portals** (customer/employee/admin).
-- **Scope**: FOHP requires SSG/SSR for SEO-critical or public pages and SPA for feature-rich, user-specific dashboards.
+- **Scope**: FOH-PRO requires SSG/SSR for SEO-critical or public pages and SPA for feature-rich, user-specific dashboards.
 
 1. **Static Site Generation (SSG)**
     - **Pages**: Home, About, Services Overview, FAQ, Blog
