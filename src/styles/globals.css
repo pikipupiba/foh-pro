@@ -1,0 +1,35 @@
+/* Import Tailwind's base, components, and utilities */
+@import "tailwindcss";
+
+/* Define custom theme values using CSS variables */
+@theme {
+  /* Define brand colors */
+  --color-brand-lime: #9aea00;
+  --color-brand-black: #000000;
+  /* Add other brand colors (white, dark gray) if needed as variables */
+  /* Example: --color-brand-dark-gray: #333333; */
+
+  /* Define fonts (if not handled by Tailwind config/plugin) */
+  /* Example: --font-owners: "Owners", sans-serif; */
+  /* Example: --font-inter: "Inter", sans-serif; */
+
+  /* Define custom container settings if needed */
+  /* Example:
+  .container {
+    margin-inline: auto;
+    padding-inline: 1rem; // Adjust padding as needed
+    max-width: theme(screens.xl); // Example max-width
+  }
+  */
+}
+
+/* Add any other global base styles or custom utilities using @utility here */
+/* Example:
+body {
+  @apply font-inter bg-gray-50;
+}
+
+@utility .btn-secondary {
+  @apply bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded;
+}
+*/
