@@ -16,10 +16,14 @@
 *   Updated `memory-bank/activeContext.md` (this file).
 *   **Firebase Setup**: User created Firebase project, installed CLI, ran `firebase init`, and provided config.
 *   **Firebase Integration**: Created `src/lib/firebase/firebaseConfig.ts` with provided credentials and initialized SDK exports (app, auth, db, storage, analytics).
+*   **Firebase Hosting Deployment**:
+    *   Configured Next.js for static export (`output: 'export'` in `next.config.js`) to align with Firebase Hosting's `public` directory setting (`out`).
+    *   Added `cleanUrls: true` to `firebase.json` to handle extensionless URLs correctly.
+    *   Successfully built and deployed the application and configuration changes, resolving the 404 error on `/firebase-test`. Tested basic Firestore connectivity via the deployed page.
 
 ## Next Steps
 
-*   Firebase project is connected and SDK is configured in the codebase.
+*   Firebase project is connected, SDK is configured, and initial deployment to Hosting is successful and verified.
 *   Next logical steps could include:
     *   Implementing basic Firebase Authentication (e.g., simple login/signup form, Auth context).
     *   Defining initial Firestore data models and security rules (`firestore.rules`).
