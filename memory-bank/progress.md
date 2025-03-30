@@ -15,6 +15,8 @@
 *   Memory Bank structure created and populated with initial context + branding.
 *   `src/` directory structure scaffolded according to design (verified via `list_files`).
 *   Core development scripts (`dev`, `lint`, `test`, `storybook`) confirmed functional after necessary dependency installations and configuration fixes.
+*   Firebase project created and linked via `firebase init`.
+*   Firebase SDK configured in `src/lib/firebase/firebaseConfig.ts`.
 
 ## What's Left to Build (High-Level based on Project Brief)
 
@@ -23,7 +25,7 @@
 *   **Customer Portal**: All features outlined in the brief (Pre-Rental, Event Planning, Post-Event).
 *   **Employee Portal**: All features outlined in the brief (Logistics, Workflow, On-Site Tools).
 *   **Admin Portal**: All features outlined in the brief (Dashboards, Scheduling, Monitoring, etc.).
-*   **Firebase Setup**: Detailed Firestore data modeling, security rules, Cloud Functions implementation.
+*   **Firebase Configuration**: Detailed Firestore data modeling, security rules (`firestore.rules`), Cloud Functions implementation (`functions/`), Storage rules (`storage.rules`).
 *   **Third-Party Integrations**: Implementation for Current RMS, QuickBooks/Xero, Google Workspace, Social Media, etc.
 *   **UI Implementation**: Building out components based on design (using Tailwind, Framer Motion, Storybook).
 *   **Testing**: Writing unit, integration, and E2E tests for all features.
@@ -35,7 +37,7 @@
 
 ## Next Milestones (Tentative)
 
-1.  Setup Firebase project connection and basic Authentication flow.
+1.  **Firebase Setup & Basic Auth**: Project connected, SDK configured. Next: Implement basic Authentication flow.
 2.  Implement basic layout components.
 3.  Build out initial public-facing pages (e.g., Home page with SSG).
 4.  Start development on one of the core portals (e.g., Customer Portal - Pre-Rental features).
