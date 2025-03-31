@@ -6,12 +6,14 @@
   /* Define brand colors */
   --color-brand-lime: #9aea00;
   --color-brand-black: #000000;
-  /* Add other brand colors (white, dark gray) if needed as variables */
-  /* Example: --color-brand-dark-gray: #333333; */
+  --color-brand-white: #ffffff; /* Assuming white is needed */
+  --color-brand-dark-gray: #333333;
 
-  /* Define fonts (if not handled by Tailwind config/plugin) */
-  /* Example: --font-owners: "Owners", sans-serif; */
-  /* Example: --font-inter: "Inter", sans-serif; */
+  /* Define fonts - Replace "Owners", "Inter" etc. with actual font names if different */
+  --font-owners: "Owners", sans-serif;
+  --font-owners-bold: "Owners Bold", sans-serif; /* Or adjust if bold is just a weight */
+  --font-inter: "Inter", sans-serif;
+  --font-inter-bold: "Inter Bold", sans-serif; /* Or adjust if bold is just a weight */
 
   /* Define custom container settings if needed */
   /* Example:
@@ -21,15 +23,29 @@
     max-width: theme(screens.xl); // Example max-width
   }
   */
+
+  /* Map CSS variables to Tailwind theme values */
+  color: {
+    'lime-green': var(--color-brand-lime),
+    'dark-gray': var(--color-brand-dark-gray),
+    'black': var(--color-brand-black),
+    'white': var(--color-brand-white),
+  };
+  fontFamily: {
+    'owners': var(--font-owners),
+    'owners-bold': var(--font-owners-bold),
+    'inter': var(--font-inter),
+    'inter-bold': var(--font-inter-bold),
+  };
 }
 
 /* Add any other global base styles or custom utilities using @utility here */
-/* Example:
 body {
-  @apply font-inter bg-gray-50;
+  /* Apply a default body font if desired */
+  @apply font-inter;
 }
 
 @utility .btn-secondary {
   @apply bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded;
 }
-*/
+/* Removed extraneous closing comment */
