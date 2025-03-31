@@ -4,7 +4,7 @@
   "description": "Web application for Front of House Productions. Provides customer, employee, and admin portals for event production rental, scheduling, and real-time operations.",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -43,14 +43,10 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.26.9",
-    "@babel/preset-react": "^7.26.3",
-    "@babel/preset-typescript": "^7.27.0",
     "@storybook/addon-actions": "^8.6.11",
     "@storybook/addon-essentials": "^8.6.11",
     "@storybook/addon-interactions": "^8.6.11",
     "@storybook/addon-links": "^8.6.11",
-    "@storybook/addon-webpack5-compiler-babel": "^3.0.5",
     "@storybook/nextjs": "^8.6.11",
     "@storybook/react": "^8.6.11",
     "@storybook/react-webpack5": "^8.6.11",

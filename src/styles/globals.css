@@ -1,42 +1,59 @@
 /* Import Tailwind's base, components, and utilities */
 @import "tailwindcss";
 
-/* Define custom theme values using CSS variables */
-@theme {
-  /* Define brand colors */
-  --color-brand-lime: #9aea00;
-  --color-brand-black: #000000;
-  --color-brand-white: #ffffff; /* Assuming white is needed */
-  --color-brand-dark-gray: #333333;
-
-  /* Define fonts - Replace "Owners", "Inter" etc. with actual font names if different */
-  --font-owners: "Owners", sans-serif;
-  --font-owners-bold: "Owners Bold", sans-serif; /* Or adjust if bold is just a weight */
-  --font-inter: "Inter", sans-serif;
-  --font-inter-bold: "Inter Bold", sans-serif; /* Or adjust if bold is just a weight */
-
-  /* Define custom container settings if needed */
-  /* Example:
-  .container {
-    margin-inline: auto;
-    padding-inline: 1rem; // Adjust padding as needed
-    max-width: theme(screens.xl); // Example max-width
-  }
-  */
-
-  /* Mappings moved to tailwind.config.js */
+/* Define custom fonts using @font-face */
+@font-face {
+  font-family: 'Owners';
+  src: url('/path-to-fonts/Owners-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
 }
 
-/* Add any other global base styles or custom utilities using @utility here */
+@font-face {
+  font-family: 'Owners Bold';
+  src: url('/path-to-fonts/Owners-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/path-to-fonts/Inter-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter Bold';
+  src: url('/path-to-fonts/Inter-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* Define custom theme values using CSS variables */
+@theme {
+  /* Brand colors */
+  --color-brand-lime: #9aea00;
+  --color-brand-black: #000000;
+  --color-brand-white: #ffffff;
+  --color-brand-dark-gray: #333333;
+
+  /* Custom fonts */
+  --font-owners: 'Owners', sans-serif;
+  --font-owners-bold: 'Owners Bold', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+  --font-inter-bold: 'Inter Bold', sans-serif;
+}
+
+/* Apply default font to the body */
 body {
-  /* Apply a default body font if desired */
   @apply font-inter;
 }
 
+/* Define custom components */
 @layer components {
   .btn-secondary {
     @apply bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded;
   }
   /* Add other component styles here */
 }
-/* Removed extraneous closing comment */
