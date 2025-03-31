@@ -3,7 +3,6 @@ const nextConfig = {
   // Configure Next.js to output a static export.
   // This is required for compatibility with Firebase Hosting's default configuration
   // which serves files from the 'out' directory.
-  output: 'export',
 
   // Optional: Add other Next.js configurations here if needed in the future.
   // reactStrictMode: true,

@@ -1,9 +1,9 @@
 import React from 'react';
-import MainLayout from '../components/layout/MainLayout'; // Adjust path if needed
+// No longer need MainLayout import here
 
 const HomePage: React.FC = () => {
   return (
-    <MainLayout>
+    <> {/* Use a fragment or a simple div if needed */}
       <div className="text-center">
         <h1 className="text-4xl font-owners-bold text-dark-gray mb-4">
           Welcome to foh-pro!
@@ -16,7 +16,7 @@ const HomePage: React.FC = () => {
           Get Started
         </button>
       </div>
-    </MainLayout>
+    </>
   );
 };
 

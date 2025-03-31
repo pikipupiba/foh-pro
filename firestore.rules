@@ -3,17 +3,76 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // This rule allows anyone with your Firestore database reference to view, edit,
-    // and delete all data in your Firestore database. It is useful for getting
-    // started, but it is configured to expire after 30 days because it
-    // leaves your app open to attackers. At that time, all client
-    // requests to your Firestore database will be denied.
-    //
-    // Make sure to write security rules for your app before that time, or else
-    // all client requests to your Firestore database will be denied until you Update
-    // your rules
-    match /{document=**} {
-      allow read, write: if request.time < timestamp.date(2025, 4, 28);
+    // --- Helper Functions ---
+    // Checks if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
     }
+
+    // Checks if the authenticated user has a specific role (using custom claims)
+    // Roles could be 'customer', 'employee', 'admin'
+    function hasRole(role) {
+      return isAuthenticated() && request.auth.token.role == role;
+    }
+
+    // Checks if the authenticated user is the owner of the document
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // --- Default Deny ---
+    // Deny all reads/writes by default unless explicitly allowed by other rules
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- User Profiles ---
+    // Users can read and write their own profile information.
+    // Admins can potentially read any profile (adjust as needed).
+    match /users/{userId} {
+      allow read, update, delete: if isOwner(userId); // User can manage their own profile
+      allow create: if isAuthenticated(); // Any authenticated user can create their profile initially
+      // allow read: if hasRole('admin'); // Example: Allow admins to read any profile
+    }
+
+    // --- Events ---
+    // Placeholder: Define rules for event data access
+    // Example: Customers can read events they are part of, employees/admins can manage all
+    match /events/{eventId} {
+      allow read, write: if false; // TODO: Implement specific rules
+      // allow read: if isAuthenticated(); // Example: Allow any authenticated user to read
+      // allow write: if hasRole('employee') || hasRole('admin'); // Example: Allow employees/admins to write
+    }
+
+    // --- Rentals ---
+    // Placeholder: Define rules for rental data access
+    // Example: Customers can manage their own rentals, employees/admins can manage all
+    match /rentals/{rentalId} {
+      allow read, write: if false; // TODO: Implement specific rules
+      // match /users/{userId}/rentals/{rentalId} { // Alternative: Nested under user
+      //   allow read, write: if isOwner(userId);
+      // }
+      // allow read, write: if hasRole('employee') || hasRole('admin'); // Example: Allow employees/admins
+    }
+
+    // --- Inventory ---
+    // Placeholder: Define rules for inventory data access
+    // Example: Only employees/admins can read/write inventory
+    match /inventory/{itemId} {
+      allow read, write: if false; // TODO: Implement specific rules
+      // allow read, write: if hasRole('employee') || hasRole('admin');
+    }
+
+    // --- Venues ---
+    // Placeholder: Define rules for venue data access
+    // Example: Authenticated users can read, employees/admins can write
+    match /venues/{venueId} {
+      allow read, write: if false; // TODO: Implement specific rules
+      // allow read: if isAuthenticated();
+      // allow write: if hasRole('employee') || hasRole('admin');
+    }
+
+    // Add other collection rules here as needed...
+
   }
 }

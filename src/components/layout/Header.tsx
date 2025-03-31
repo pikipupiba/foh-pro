@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import AuthStatus from '@/components/auth/AuthStatus'; // Import the AuthStatus component
 
 const Header: React.FC = () => {
   return (
@@ -24,13 +25,8 @@ const Header: React.FC = () => {
           {/* Add more links as needed */}
         </div>
 
-        {/* Auth/User Placeholder */}
-        <div>
-          {/* Example: Login Button */}
-          <button className="bg-lime-green text-black font-inter-bold px-4 py-1 rounded hover:bg-opacity-80 transition-colors">
-            Login
-          </button>
-        </div>
+        {/* Authentication Status */}
+        <AuthStatus />
       </nav>
     </header>
   );

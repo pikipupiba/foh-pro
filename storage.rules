@@ -1,12 +1,49 @@
 rules_version = '2';
 
-// Craft rules based on data in your Firestore database
-// allow write: if firestore.get(
-//    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
 service firebase.storage {
   match /b/{bucket}/o {
-    match /{allPaths=**} {
-      allow read, write: if false;
+
+    // --- Helper Functions ---
+    // Checks if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
     }
+
+    // Checks if the authenticated user's ID matches the userId segment in the path
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // --- Default Deny ---
+    // Deny all reads/writes by default unless explicitly allowed by other rules
+    // Note: This rule is implicitly overridden by more specific matches below.
+    // Keeping it can be useful for clarity or if top-level access needs denial.
+    // match /{allPaths=**} {
+    //   allow read, write: if false;
+    // }
+
+    // --- User Files ---
+    // Allow authenticated users to read and write files within their own folder.
+    // Path examples: users/user123/profile.jpg, users/user123/documents/contract.pdf
+    match /users/{userId}/{allPaths=**} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // --- Public Files (Example) ---
+    // Allow anyone to read files in a designated 'public' folder.
+    // match /public/{allPaths=**} {
+    //  allow read: if true;
+    //  allow write: if false; // Typically, public files aren't writable by clients
+    // }
+
+    // --- Event Media (Example) ---
+    // Allow authenticated users to read, maybe specific roles to write.
+    // match /events/{eventId}/{allPaths=**} {
+    //   allow read: if isAuthenticated();
+    //   allow write: if hasRole('employee') || hasRole('admin'); // Requires hasRole function if needed
+    // }
+
+    // Add other storage path rules here as needed...
+
   }
 }
