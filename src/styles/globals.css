@@ -1,53 +1,21 @@
 /* Import Tailwind's base, components, and utilities */
 @import "tailwindcss";
 
-/* Define custom fonts using @font-face */
-@font-face {
-  font-family: 'Owners';
-  src: url('/path-to-fonts/Owners-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Owners Bold';
-  src: url('/path-to-fonts/Owners-Bold.woff2') format('woff2');
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Inter';
-  src: url('/path-to-fonts/Inter-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Inter Bold';
-  src: url('/path-to-fonts/Inter-Bold.woff2') format('woff2');
-  font-weight: bold;
-  font-style: normal;
-}
-
 /* Define custom theme values using CSS variables */
 @theme {
   /* Brand colors */
-  --color-brand-lime: #9aea00;
-  --color-brand-black: #000000;
-  --color-brand-white: #ffffff;
-  --color-brand-dark-gray: #333333;
+  --foh-lime: #9aea00;
+  --foh-black: #000000;
+  --foh-white: #ffffff;
+  --foh-dark-gray: #333333;
 
-  /* Custom fonts */
-  --font-owners: 'Owners', sans-serif;
-  --font-owners-bold: 'Owners Bold', sans-serif;
-  --font-inter: 'Inter', sans-serif;
-  --font-inter-bold: 'Inter Bold', sans-serif;
+  --font-sans: 'Owners', system-ui, sans-serif;
+  --font-weight-sans: 700; /* Assuming 700 is the weight for 'Bold' */
 }
 
 /* Apply default font to the body */
 body {
-  @apply font-inter;
+  @apply font-sans;
 }
 
 /* Define custom components */
