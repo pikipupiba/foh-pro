@@ -24,19 +24,7 @@
   }
   */
 
-  /* Map CSS variables to Tailwind theme values */
-  color: {
-    'lime-green': var(--color-brand-lime),
-    'dark-gray': var(--color-brand-dark-gray),
-    'black': var(--color-brand-black),
-    'white': var(--color-brand-white),
-  };
-  fontFamily: {
-    'owners': var(--font-owners),
-    'owners-bold': var(--font-owners-bold),
-    'inter': var(--font-inter),
-    'inter-bold': var(--font-inter-bold),
-  };
+  /* Mappings moved to tailwind.config.js */
 }
 
 /* Add any other global base styles or custom utilities using @utility here */
@@ -45,7 +33,10 @@ body {
   @apply font-inter;
 }
 
-@utility .btn-secondary {
-  @apply bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded;
+@layer components {
+  .btn-secondary {
+    @apply bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded;
+  }
+  /* Add other component styles here */
 }
 /* Removed extraneous closing comment */

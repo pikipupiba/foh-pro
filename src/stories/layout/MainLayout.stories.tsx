@@ -1,20 +1,21 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react'; // Added comma
+import type { Meta, StoryObj } from '@storybook/react';
 import MainLayout from '../../../src/components/layout/MainLayout'; // Adjust path
-import { MemoryRouterProvider } from 'next-router-mock/MemoryRouterProvider'; // Needed for Next.js Link component
+// Removed MemoryRouterProvider import
 
+// @storybook/nextjs addon should handle routing context
 const meta: Meta<typeof MainLayout> = {
   title: 'Layout/MainLayout',
   component: MainLayout,
-  decorators: [
-    (Story) => (
-      <MemoryRouterProvider>
-        <Story />
-      </MemoryRouterProvider>
-    ),
-  ],
+  // Removed MemoryRouterProvider decorator
   parameters: {
     layout: 'fullscreen', // Use fullscreen layout
+    nextjs: { // Add this if you need specific Next.js routing behavior mocks
+      appDirectory: true, // Assuming App Router if applicable, adjust if using Pages Router
+      // router: {
+      //   pathname: '/some-path', // Example: Mock specific path
+      // },
+    },
   },
   tags: ['autodocs'],
   argTypes: {
