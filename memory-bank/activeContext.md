@@ -1,10 +1,10 @@
 # Active Context (foh-pro)
 
-**Date:** 2025-03-29
+**Date:** 2025-03-31
 
 ## Current Focus
 
-*   Initial project setup and Memory Bank initialization.
+*   Simplifying and standardizing Storybook configuration.
 
 ## Recent Changes
 
@@ -29,17 +29,28 @@
     *   Expanded `src/pages/firebase-test.tsx` to include tests for Authentication (Anonymous Sign-in/out), Firestore (Update, Delete, Real-time Subscription), and Cloud Storage (File Upload).
     *   Restyled the page using Tailwind v4 classes and CSS theme variables for a cleaner UI.
     *   Successfully built and redeployed the enhanced test page.
+*   **Storybook Simplification**:
+    *   Moved stories from `storybook/stories/` to `src/stories/`.
+    *   Removed old `storybook/` directory.
+    *   Simplified `.storybook/main.ts` by removing initial custom `webpackFinal` config.
+    *   Diagnosed and fixed TypeScript parsing errors by restoring Babel config in `webpackFinal` (relying on `.babelrc`).
+    *   Fixed CSS syntax errors (missing semicolons) in `src/styles/globals.css`.
+    *   Installed `@storybook/nextjs` addon and added it to `.storybook/main.ts`.
+    *   Removed incompatible `next-router-mock` (`MemoryRouterProvider`) from story files.
+    *   Fixed Tailwind v4 `@theme` syntax error in `src/styles/globals.css`.
+    *   Created `tailwind.config.js` with correct theme mappings.
+    *   Fixed Tailwind v4 `@utility` syntax error in `src/styles/globals.css` by using `@layer components`.
+    *   Successfully ran `npm run storybook` with the simplified and corrected configuration.
 
 ## Next Steps
 
-*   Firebase project is connected, SDK is configured, initial deployment to Hosting is successful, and a comprehensive test page is available and styled.
-*   Next logical steps could include:
-    *   Implementing basic Firebase Authentication (e.g., simple login/signup form, Auth context).
-    *   Defining initial Firestore data models and security rules (`firestore.rules`).
-    *   Creating a basic page/component that interacts with Firebase (e.g., reading/writing data).
-*   Await user direction for the next task.
+*   Storybook configuration is simplified and functional.
+*   Firebase setup is complete and tested.
+*   Tailwind v4 is configured and basic theme/components are defined.
+*   Await user direction for the next task (e.g., implementing auth, building components/pages).
 
 ## Active Decisions & Considerations
 
-*   Ensuring the initial Memory Bank accurately reflects the provided source documents.
-*   Establishing the baseline understanding of the project structure, goals, and technology stack.
+*   Decided to rely on `.babelrc` and a minimal `webpackFinal` for Storybook's Babel configuration.
+*   Used `@storybook/nextjs` addon for Next.js integration instead of `next-router-mock`.
+*   Corrected Tailwind v4 syntax in `globals.css` and `tailwind.config.js`.
