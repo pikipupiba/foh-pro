@@ -1,8 +1,9 @@
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react'; // Import useEffect
 import useStore from '@/store'; // Import the Zustand store hook
-import '../styles/globals.css'; // Import global styles
-import MainLayout from '@/components/layout/MainLayout'; // Use path alias for consistency
+import '../styles/globals.css';
+import MainLayout from '@/components/layout/MainLayout';
+import { ThemeProvider } from 'next-themes'; // Import ThemeProvider
 
 function MyApp({ Component, pageProps }: AppProps) {
   // Get actions from the Zustand store
@@ -19,11 +20,18 @@ function MyApp({ Component, pageProps }: AppProps) {
     // Run only once on mount
   }, [initializeAuthListener, cleanupAuthListener]);
 
-  // Wrap the Component with MainLayout
+  // Wrap everything with ThemeProvider
   return (
-    <MainLayout>
-      <Component {...pageProps} />
-    </MainLayout>
+    <ThemeProvider
+      attribute="class" // Use class strategy (adds .dark/.light to html tag)
+      defaultTheme="system" // Default to system preference
+      enableSystem // Enable system preference detection
+      disableTransitionOnChange // Optional: Prevent transitions on theme change
+    >
+      <MainLayout>
+        <Component {...pageProps} />
+      </MainLayout>
+    </ThemeProvider>
   );
 }
 

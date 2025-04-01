@@ -1,17 +1,11 @@
 /* Import Tailwind's base, components, and utilities */
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 /* Define custom theme values using CSS variables */
-@theme {
-  /* Brand colors */
-  --foh-lime: #9aea00;
-  --foh-black: #000000;
-  --foh-white: #ffffff;
-  --foh-dark-gray: #333333;
-
-  --font-sans: 'Owners', system-ui, sans-serif;
-  --font-weight-sans: 700; /* Assuming 700 is the weight for 'Bold' */
-}
+/* @theme block removed as it's not needed for this configuration */
 
 /* Apply default font to the body */
 body {
@@ -24,4 +18,104 @@ body {
     @apply bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded;
   }
   /* Add other component styles here */
+}
+
+:root {
+  /* Generated Theme - Light Mode (HSL) */
+  --background: 81 100% 95%;
+  --foreground: 81 5% 0%;
+  --card: 81 50% 90%;
+  --card-foreground: 81 5% 10%;
+  --popover: 81 100% 95%;
+  --popover-foreground: 81 100% 0%;
+  --primary: 81 100% 45.9%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 81 30% 70%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 43 30% 85%;
+  --muted-foreground: 81 5% 35%;
+  --accent: 43 30% 80%;
+  --accent-foreground: 81 5% 10%;
+  --destructive: 0 100% 30%;
+  --destructive-foreground: 81 5% 90%;
+  --border: 81 30% 50%;
+  --input: 81 30% 18%;
+  --ring: 81 100% 45.9%;
+  --radius: 0.3rem;
+  /* Keep font definitions */
+  --font-sans: 'Owners', system-ui, sans-serif;
+  --font-weight-sans: 700;
+}
+
+.dark {
+  /* Generated Theme - Dark Mode (HSL) */
+  --background: 81 50% 5%;
+  --foreground: 81 5% 90%;
+  --card: 81 50% 0%;
+  --card-foreground: 81 5% 90%;
+  --popover: 81 50% 5%;
+  --popover-foreground: 81 5% 90%;
+  --primary: 81 100% 45.9%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 81 30% 10%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 43 30% 15%;
+  --muted-foreground: 81 5% 60%;
+  --accent: 43 30% 15%;
+  --accent-foreground: 81 5% 90%;
+  --destructive: 0 100% 30%;
+  --destructive-foreground: 81 5% 90%;
+  --border: 81 30% 18%;
+  --input: 81 30% 18%;
+  --ring: 81 100% 45.9%;
+  --radius: 0.3rem; /* Ensure radius matches :root */
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Custom FOH color mappings removed as they are integrated above */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

@@ -6,9 +6,8 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-foh-dark-gray mt-auto py-6"> {/* Use theme variable, remove redundant text-white */}
-      {/* Use Flexbox to align items */}
-      <div className="container mx-auto px-4 flex items-center justify-center"> {/* Remove font-inter */}
+    <footer className="bg-background mt-auto py-6">
+      <div className="container mx-auto px-4 flex items-center justify-center">
         {/* Icon on the left */}
         <Image
           src="/logos/icon-color.png"
@@ -21,17 +20,17 @@ const Footer: React.FC = () => {
         <div>
           {/* Footer Links Placeholder */}
           <div className="space-x-4 mb-2">
-          <Link href="/privacy-policy" className="text-sm hover:text-foh-lime transition-colors"> {/* Use theme variable */}
+          <Link href="/privacy-policy" className="text-sm hover:text-primary transition-colors">
             Privacy Policy
           </Link>
-          <Link href="/terms-of-service" className="text-sm hover:text-foh-lime transition-colors"> {/* Use theme variable */}
+          <Link href="/terms-of-service" className="text-sm hover:text-primary transition-colors">
             Terms of Service
           </Link>
           {/* Add more links as needed */}
         </div>
 
         {/* Copyright */}
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-muted-foreground">
           &copy; {currentYear} Front of House Productions. All rights reserved.
           </p>
         </div>

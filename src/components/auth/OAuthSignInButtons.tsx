@@ -6,6 +6,7 @@ import {
   AuthError, // Keep AuthError for general typing if needed
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase/firebaseConfig';
+import { Button } from "@/components/ui/button"; // Import shadcn Button
 // Import icons (assuming you'll add an icon library like react-icons)
 // import { FaGoogle, FaFacebook, FaMicrosoft } from 'react-icons/fa';
 
@@ -64,15 +65,16 @@ const OAuthSignInButtons: React.FC = () => {
           {error}
         </div>
       )}
-      <button
+      <Button
+        variant="outline" // Use outline variant for a similar style
         type="button"
         onClick={handleGoogleSignIn}
         disabled={isLoading}
-        className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+        className="w-full" // Keep full width
       >
-        {/* <FaGoogle className="mr-2" /> */}
+        {/* Add Google icon here if desired */}
         {isLoading ? 'Signing in...' : 'Sign in with Google'}
-      </button>
+      </Button>
     </div>
   );
 };
