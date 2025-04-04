@@ -11,7 +11,7 @@
     "test": "jest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "deploy": "next build && npm run build --prefix functions && firebase deploy --only functions,hosting --debug"
+    "deploy": "next build && npm run build --prefix functions && firebase deploy --debug"
   },
   "repository": {
     "type": "git",

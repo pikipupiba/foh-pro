@@ -49,6 +49,13 @@ const Header: React.FC = () => {
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/emulator-test" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Emulator Test
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
             {/* Add more items as needed */}
           </NavigationMenuList>
         </NavigationMenu>

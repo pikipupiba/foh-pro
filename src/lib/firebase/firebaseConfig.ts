@@ -4,6 +4,8 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getAnalytics, isSupported } from 'firebase/analytics';
+import { getFunctions } from 'firebase/functions';
+import { connectToEmulators } from './useEmulators';
 
 // Read Firebase configuration from environment variables
 const firebaseConfig = {
@@ -28,10 +30,20 @@ if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
 const canInitialize = firebaseConfig.apiKey && firebaseConfig.authDomain && firebaseConfig.projectId;
 const app = canInitialize && !getApps().length ? initializeApp(firebaseConfig) : (canInitialize ? getApp() : null);
 
+// Connect to emulators in development mode
+if (app && process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
+  // Check if we should use emulators (default to true in development)
+  const useEmulators = process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATORS !== 'false';
+  if (useEmulators) {
+    connectToEmulators(app);
+  }
+}
+
 // Ensure app is initialized before getting other services
 const auth = app ? getAuth(app) : null;
 const db = app ? getFirestore(app) : null;
 const storage = app ? getStorage(app) : null;
+const functions = app ? getFunctions(app) : null;
 
 // Initialize Analytics only if supported (runs client-side) and app is initialized
 let analytics = null;
@@ -44,6 +56,6 @@ if (app && typeof window !== 'undefined') {
 }
 
 // Export potentially null services - consuming code should check for null
-export { app, auth, db, storage, analytics };
+export { app, auth, db, storage, functions, analytics };
 // Exporting the config read from env vars might expose undefined values if not set
 // export default firebaseConfig;
