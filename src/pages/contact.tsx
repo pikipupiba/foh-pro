@@ -26,7 +26,7 @@ const ContactPage: React.FC = () => {
         </h1>
         {/* Remove redundant text color classes and font-inter */}
         <p className="mb-6">
-          Have questions or need assistance? Fill out the form below, and we'll get back to you shortly.
+          Have questions or need assistance? Fill out the form below, and we&apos;ll get back to you shortly.
         </p>
 
         {/* Remove font-inter */}

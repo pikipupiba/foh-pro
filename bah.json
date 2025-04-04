@@ -1,0 +1,57 @@
+{
+  "@type": "type.googleapis.com/google.cloud.audit.AuditLog",
+  "status": {},
+  "authenticationInfo": {
+    "principalEmail": "Cosmo@foh-pro.com",
+    "principalSubject": "user:Cosmo@foh-pro.com"
+  },
+  "requestMetadata": {
+    "callerIp": "162.211.34.250",
+    "callerSuppliedUserAgent": "FirebaseCLI/14.0.1,gzip(gfe),gzip(gfe)",
+    "requestAttributes": {
+      "time": "2025-04-03T20:02:32.493584651Z",
+      "auth": {}
+    },
+    "destinationAttributes": {}
+  },
+  "serviceName": "cloudfunctions.googleapis.com",
+  "methodName": "google.cloud.functions.v2.FunctionService.CreateFunction",
+  "authorizationInfo": [
+    {
+      "resource": "projects/foh-pro/locations/us-central1/functions/nextApp",
+      "permission": "cloudfunctions.functions.create",
+      "granted": true,
+      "resourceAttributes": {
+        "service": "cloudfunctions.googleapis.com",
+        "name": "projects/foh-pro/locations/us-central1/functions/nextApp",
+        "type": "cloudfunctions.googleapis.com/Function"
+      },
+      "permissionType": "ADMIN_WRITE"
+    }
+  ],
+  "resourceName": "projects/foh-pro/locations/us-central1/functions/nextApp",
+  "request": {
+    "parent": "projects/foh-pro/locations/us-central1",
+    "@type": "type.googleapis.com/google.cloud.functions.v2.CreateFunctionRequest",
+    "function": {
+      "service_config": {
+        "available_cpu": "1",
+        "max_instance_request_concurrency": 80,
+        "timeout_seconds": 60,
+        "available_memory": "1024Mi"
+      },
+      "labels": {
+        "firebase-functions-hash": "3f008d19e5ec0148546cfbc92a3d935da82ae9c5",
+        "deployment-tool": "cli-firebase"
+      },
+      "name": "projects/foh-pro/locations/us-central1/functions/nextApp",
+      "build_config": {
+        "runtime": "nodejs20",
+        "entry_point": "nextApp",
+        "source": {}
+      }
+    }
+  },
+  "response": { "@type": "type.googleapis.com/google.longrunning.Operation" },
+  "resourceLocation": { "currentLocations": ["us-central1"] }
+}

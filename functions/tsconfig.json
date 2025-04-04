@@ -8,7 +8,10 @@
     "outDir": "lib",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017"
+    "target": "es2017",
+    "lib": ["es2017", "DOM", "DOM.Iterable"], // Add DOM libraries
+    "jsx": "preserve", // Add JSX processing support for types
+    "skipLibCheck": true // Ignore type errors in node_modules
   },
   "compileOnSave": true,
   "include": [

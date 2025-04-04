@@ -7,6 +7,7 @@
     {
       "source": "functions",
       "codebase": "default",
+      "runtime": "nodejs20",
       "ignore": [
         "node_modules",
         ".git",
@@ -21,13 +22,19 @@
     }
   ],
   "hosting": {
-    "public": "out",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
-    "cleanUrls": true
+    "cleanUrls": true,
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "nextApp"
+      }
+    ]
   },
   "storage": {
     "rules": "storage.rules"

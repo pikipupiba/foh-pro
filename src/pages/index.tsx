@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link'; // Import Link
 import Image from 'next/image'; // Import the Image component
 // No longer need MainLayout import here
 
@@ -27,6 +28,28 @@ const HomePage: React.FC = () => {
         <button className="bg-foh-lime text-black px-6 py-2 rounded hover:bg-opacity-80 transition-colors">
           Get Started
         </button>
+      </div>
+
+      {/* Links to Test Pages */}
+      <div className="mt-12 border-t pt-6 text-center">
+        <h2 className="text-xl font-semibold mb-4">Rendering Mode Test Pages:</h2>
+        <ul className="space-y-2">
+          <li>
+            <Link href="/test-ssg" className="text-blue-600 hover:underline">
+              Test SSG Page
+            </Link>
+          </li>
+          <li>
+            <Link href="/test-ssr" className="text-blue-600 hover:underline">
+              Test SSR Page
+            </Link>
+          </li>
+          <li>
+            <Link href="/test-csr" className="text-blue-600 hover:underline">
+              Test CSR Page
+            </Link>
+          </li>
+        </ul>
       </div>
     </>
   );

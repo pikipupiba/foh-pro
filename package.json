@@ -11,7 +11,7 @@
     "test": "jest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "deploy": "next build && firebase deploy"
+    "deploy": "next build && npm run build --prefix functions && firebase deploy --only functions,hosting --debug"
   },
   "repository": {
     "type": "git",
@@ -75,6 +75,7 @@
     "@tailwindcss/postcss": "^4.0.17",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.13.14",
     "@types/react": "^19.0.12",
     "cypress": "^14.2.1",
