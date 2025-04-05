@@ -8,14 +8,25 @@ interface SSGPageProps {
 
 const SSGPage: NextPage<SSGPageProps> = ({ buildTimestamp }) => {
   return (
-    <div>
+    <div className="container mx-auto px-4 py-8">
       <Head>
         <title>Test SSG Page</title>
       </Head>
-      <h1>Test SSG Page</h1>
-      <p>This page was generated using Static Site Generation (SSG).</p>
-      <p>Build Timestamp: {buildTimestamp}</p>
-      <p>If you refresh the page (after deployment), this timestamp should NOT change until the next build.</p>
+      <h1 className="text-3xl font-bold mb-4">Test SSG Page with ISR</h1>
+
+      <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+        <h2 className="text-xl font-semibold mb-2">How This Works</h2>
+        <p className="mb-2">This page uses <strong>Static Site Generation (SSG)</strong> with <strong>Incremental Static Regeneration (ISR)</strong>.</p>
+        <p className="mb-2">The page is statically generated at build time, but it can be regenerated after the revalidation period (30 seconds).</p>
+        <p>If you refresh immediately, you'll see the same timestamp. If you wait 30+ seconds and refresh, a new version may be generated.</p>
+      </div>
+
+      <div className="p-4 border rounded-lg">
+        <h2 className="text-xl font-semibold mb-2">Page Information</h2>
+        <p className="mb-2"><strong>Build/Regeneration Timestamp:</strong></p>
+        <p className="font-mono bg-gray-100 p-2 rounded">{buildTimestamp}</p>
+        <p className="mt-4 text-sm text-gray-600">Current client time: {new Date().toISOString()}</p>
+      </div>
     </div>
   );
 };
@@ -29,8 +40,10 @@ export const getStaticProps: GetStaticProps<SSGPageProps> = async () => {
     props: {
       buildTimestamp,
     },
-    // Optional: Add revalidate for Incremental Static Regeneration (ISR)
-    // revalidate: 60, // Re-generate page every 60 seconds if requested
+    // Enable Incremental Static Regeneration (ISR)
+    // This will only regenerate the page after 30 seconds have passed
+    // and someone requests the page
+    revalidate: 30, // Re-generate page every 30 seconds if requested
   };
 };
 
