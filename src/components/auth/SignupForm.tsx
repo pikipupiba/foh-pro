@@ -1,18 +1,27 @@
 import React, { useState, FormEvent } from 'react';
 import { useRouter } from 'next/router';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/lib/firebase/firebaseConfig';
-import OAuthSignInButtons from './OAuthSignInButtons'; // Import the OAuth buttons
-import { Button } from "@/components/ui/button"; // Import shadcn Button
-import { Input } from "@/components/ui/input";   // Import shadcn Input
-import { Label } from "@/components/ui/label";   // Import shadcn Label
-// import { doc, setDoc } from 'firebase/firestore'; // To create user doc
-// import { db } from '@/lib/firebase/firebaseConfig'; // Firestore instance
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '@/lib/firebase/firebaseConfig';
+import { UserRole } from '@/lib/auth/roles';
+import OAuthSignInButtons from './OAuthSignInButtons';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const SignupForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [confirmPassword, setConfirmPassword] = useState(''); // Optional
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
+  const [role, setRole] = useState<UserRole>(UserRole.CUSTOMER);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -22,39 +31,45 @@ const SignupForm: React.FC = () => {
     setError(null);
     setIsLoading(true);
 
-    // Optional: Add password confirmation check
-    // if (password !== confirmPassword) {
-    //   setError("Passwords do not match.");
-    //   setIsLoading(false);
-    //   return;
-    // }
+    // Validate form inputs
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      setIsLoading(false);
+      return;
+    }
 
-    if (!auth) {
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!auth || !db) {
       setError("Authentication service is not available.");
       setIsLoading(false);
       return;
     }
 
     try {
+      // Create the user account
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log('Signup successful:', user.uid);
 
-      // Optional: Create a user document in Firestore
-      // if (db && user) {
-      //   try {
-      //     await setDoc(doc(db, "users", user.uid), {
-      //       uid: user.uid,
-      //       email: user.email,
-      //       role: 'customer', // Default role
-      //       createdAt: new Date(),
-      //     });
-      //     console.log('User document created in Firestore');
-      //   } catch (firestoreError) {
-      //     console.error("Error creating user document:", firestoreError);
-      //     // Decide how to handle this - maybe log it, but let signup proceed?
-      //   }
-      // }
+      // Update the user's display name
+      if (displayName) {
+        await updateProfile(user, { displayName });
+      }
+
+      // Create a user document in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        email: user.email,
+        displayName: displayName || null,
+        role: role,
+        createdAt: new Date(),
+      });
+      console.log('User document created in Firestore');
 
       // Redirect to dashboard after successful signup
       router.push('/dashboard');
@@ -82,6 +97,18 @@ const SignupForm: React.FC = () => {
         </div>
       )}
       <div>
+        <Label htmlFor="displayName">Full Name</Label>
+        <Input
+          type="text"
+          id="displayName"
+          value={displayName}
+          onChange={(e) => setDisplayName(e.target.value)}
+          required
+          disabled={isLoading}
+          placeholder="John Doe"
+        />
+      </div>
+      <div>
         <Label htmlFor="email">Email Address</Label>
         <Input
           type="email"
@@ -90,7 +117,7 @@ const SignupForm: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
           disabled={isLoading}
-          placeholder="name@example.com" // Add placeholder
+          placeholder="name@example.com"
         />
       </div>
       <div>
@@ -102,13 +129,41 @@ const SignupForm: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
           disabled={isLoading}
+          minLength={6}
         />
       </div>
-      {/* Optional: Confirm Password Field */}
-      {/* <div>
-        <label htmlFor="confirmPassword" >Confirm Password</label>
-        <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required disabled={isLoading} />
-      </div> */}
+      <div>
+        <Label htmlFor="confirmPassword">Confirm Password</Label>
+        <Input
+          type="password"
+          id="confirmPassword"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+          disabled={isLoading}
+        />
+      </div>
+      <div>
+        <Label htmlFor="role">Account Type</Label>
+        <Select
+          value={role}
+          onValueChange={(value) => setRole(value as UserRole)}
+          disabled={isLoading}
+        >
+          <SelectTrigger id="role">
+            <SelectValue placeholder="Select account type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={UserRole.CUSTOMER}>Customer</SelectItem>
+            <SelectItem value={UserRole.EMPLOYEE}>Employee</SelectItem>
+          </SelectContent>
+        </Select>
+        <p className="text-xs text-muted-foreground mt-1">
+          {role === UserRole.CUSTOMER ?
+            "For booking events and services" :
+            "For staff members (requires approval)"}
+        </p>
+      </div>
       {/* Use default Button styling which inherits from the new theme's --primary */}
       <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading ? 'Creating Account...' : 'Create Account'}

@@ -1,11 +1,10 @@
 import React from 'react';
-import Link from 'next/link'; // Import Link
-import Image from 'next/image'; // Import the Image component
-// No longer need MainLayout import here
+import Link from 'next/link';
+import Image from 'next/image';
 
 const HomePage: React.FC = () => {
   return (
-    <> {/* Use a fragment or a simple div if needed */}
+    <>
       <div className="text-center">
         {/* Add the logo */}
         <Image

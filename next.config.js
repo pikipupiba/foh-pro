@@ -2,9 +2,9 @@
 const nextConfig = {
   // Configure Next.js for development
   reactStrictMode: true,
-  swcMinify: true,
 
-  // For production builds with Firebase Hosting, uncomment the following:
+  // For production builds with Firebase Hosting
+  // We're using a Firebase Function to serve the Next.js app, so we don't need 'export'
   // output: 'export',
   // images: {
   //   unoptimized: true, // Required for static export if using next/image
@@ -14,9 +14,11 @@ const nextConfig = {
   // This allows static pages to be regenerated after a certain time
   // when requested, keeping content fresh without rebuilding the entire site
   experimental: {
-    // This enables ISR-like behavior in development
-    isrMemoryCacheSize: 0,
+    // Add experimental features here
   },
+
+  // Ensure Next.js knows it's being deployed to Firebase
+  distDir: '.next',
 };
 
 module.exports = nextConfig;

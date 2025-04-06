@@ -1,8 +1,10 @@
 import React, { useState, FormEvent } from 'react';
 import { useRouter } from 'next/router'; // For redirection after login
+import Link from 'next/link'; // For forgot password link
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase/firebaseConfig'; // Firebase auth instance
 import OAuthSignInButtons from './OAuthSignInButtons'; // Import the OAuth buttons
+import TestAccountButtons from './TestAccountButtons'; // Import test account buttons
 import { Button } from "@/components/ui/button"; // Import shadcn Button
 import { Input } from "@/components/ui/input";   // Import shadcn Input
 import { Label } from "@/components/ui/label";   // Import shadcn Label
@@ -67,8 +69,13 @@ const LoginForm: React.FC = () => {
           placeholder="name@example.com" // Add placeholder for better UX
         />
       </div>
-      <div>
-        <Label htmlFor="password">Password</Label>
+      <div className="space-y-1">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="password">Password</Label>
+          <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+            Forgot password?
+          </Link>
+        </div>
         <Input
           type="password"
           id="password"
@@ -95,6 +102,18 @@ const LoginForm: React.FC = () => {
 
       {/* OAuth Buttons */}
       <OAuthSignInButtons />
+
+      {/* Test Account Buttons */}
+      <div className="relative my-4">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-border"></div>
+        </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="px-2 bg-card text-muted-foreground">QUICK LOGIN</span>
+        </div>
+      </div>
+
+      <TestAccountButtons />
     </form>
   );
 };

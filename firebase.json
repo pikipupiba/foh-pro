@@ -22,11 +22,14 @@
     }
   ],
   "hosting": {
-    "public": "public",
+    "source": ".",
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "**/.next/**",
+      "**/src/**",
+      "**/functions/**"
     ],
     "cleanUrls": true,
     "rewrites": [
@@ -61,3 +64,4 @@
     "singleProjectMode": true
   }
 }
+

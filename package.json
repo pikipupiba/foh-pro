@@ -11,10 +11,14 @@
     "test": "jest",
     "test:unit": "jest --testPathIgnorePatterns=rendering",
     "test:rendering": "jest src/__tests__/rendering",
+    "test:accounts": "jest src/__tests__/auth/test-accounts.test.js",
     "test:all": "jest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "deploy": "next build && npm run build --prefix functions && firebase deploy --debug"
+    "deploy": "next build && npm run build --prefix functions && firebase deploy --only functions,hosting --debug",
+    "deploy:frameworks": "firebase deploy --only hosting:foh-pro",
+    "deploy:clean": "next build && firebase deploy --only hosting:foh-pro",
+    "setup-test-accounts": "node scripts/setup-test-accounts.js"
   },
   "repository": {
     "type": "git",
@@ -81,7 +85,9 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.14",
     "@types/react": "^19.0.12",
+    "autoprefixer": "^10.4.21",
     "cypress": "^14.2.1",
+    "dotenv": "^16.4.7",
     "eslint": "^9.23.0",
     "eslint-config-next": "^15.2.4",
     "jest": "^29.7.0",
@@ -90,12 +96,13 @@
     "node-fetch": "^2.7.0",
     "postcss": "^8.5.3",
     "postcss-loader": "^8.1.1",
-    "tailwindcss": "^4.0.17",
+    "tailwindcss": "^4.1.3",
+    "tailwindcss-animate": "^1.0.7",
     "ts-jest": "^29.3.0",
     "typescript": "^5.8.2"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": "22"
   },
   "eslintConfig": {
     "extends": "next"
@@ -104,5 +111,193 @@
     ">0.2%",
     "not dead",
     "not op_mini all"
-  ]
+  ],
+  "firebase": {
+    "hosting": {
+      "source": ".",
+      "frameworksBackend": {
+        "region": "us-central1",
+        "invoker": "public"
+      }
+    }
+  }
 }
+warning: LF will be replaced by CRLF in firebase.json.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in functions/src/index.ts.
+The file will have its original line endings in your working directory
+[1mdiff --git a/firebase.json b/firebase.json[m
+[1mindex 0d2f09e..0d0d3e5 100644[m
+[1m--- a/firebase.json[m
+[1m+++ b/firebase.json[m
+[36m@@ -22,11 +22,14 @@[m
+     }[m
+   ],[m
+   "hosting": {[m
+[31m-    "public": "public",[m
+[32m+[m[32m    "source": ".",[m
+     "ignore": [[m
+       "firebase.json",[m
+       "**/.*",[m
+[31m-      "**/node_modules/**"[m
+[32m+[m[32m      "**/node_modules/**",[m
+[32m+[m[32m      "**/.next/**",[m
+[32m+[m[32m      "**/src/**",[m
+[32m+[m[32m      "**/functions/**"[m
+     ],[m
+     "cleanUrls": true,[m
+     "rewrites": [[m
+[36m@@ -61,3 +64,4 @@[m
+     "singleProjectMode": true[m
+   }[m
+ }[m
+[41m+[m
+[1mdiff --git a/functions/src/index.ts b/functions/src/index.ts[m
+[1mindex ab2b5cf..ef810a9 100644[m
+[1m--- a/functions/src/index.ts[m
+[1m+++ b/functions/src/index.ts[m
+[36m@@ -12,7 +12,7 @@[m [mconst server = next({[m
+   dir: path.join(__dirname, "../../"), // Correctly points to the project root[m
+   conf: {[m
+     // Ensure Next.js knows it's running in a serverless environment[m
+[31m-    // distDir: "../../.next", // Point to the .next directory in the root (relative to functions/lib)[m
+[32m+[m[32m    distDir: ".next", // Point to the .next directory in the root[m
+   },[m
+ });[m
+ [m
+[36m@@ -24,15 +24,42 @@[m [mexport const nextApp = onRequest([m
+     region: "us-central1",[m
+     memory: "1GiB",[m
+     timeoutSeconds: 60,[m
+[32m+[m[32m    cors: true, // Enable CORS for all origins[m
+[32m+[m[32m    invoker: "public", // Explicitly set the invoker to public[m
+   },[m
+   async (request, response) => {[m
+     try {[m
+       logger.info(`Request received for: ${request.path}`, {structuredData: true});[m
+[32m+[m
+[32m+[m[32m      // Prepare the Next.js server (this only needs to be done once)[m
+       await server.prepare();[m
+[32m+[m
+[32m+[m[32m      // Log request details for debugging[m
+[32m+[m[32m      logger.info({[m
+[32m+[m[32m        message: "Processing request",[m
+[32m+[m[32m        url: request.url,[m
+[32m+[m[32m        method: request.method,[m
+[32m+[m[32m        headers: request.headers,[m
+[32m+[m[32m        path: request.path,[m
+[32m+[m[32m        query: request.query,[m
+[32m+[m[32m      }, {structuredData: true});[m
+[32m+[m
+[32m+[m[32m      // Handle the request with Next.js[m
+       await nextjsHandle(request, response);[m
+[32m+[m
+[32m+[m[32m      logger.info(`Request completed for: ${request.path}`, {structuredData: true});[m
+     } catch (error) {[m
+       logger.error("Error handling request with Next.js:", error, {structuredData: true});[m
+[31m-      response.status(500).send("Internal Server Error");[m
+[32m+[m
+[32m+[m[32m      // Provide more detailed error response[m
+[32m+[m[32m      if (!response.headersSent) {[m
+[32m+[m[32m        response.status(500).json({[m
+[32m+[m[32m          error: "Internal Server Error",[m
+[32m+[m[32m          message: error instanceof Error ? error.message : "Unknown error",[m
+[32m+[m[32m          path: request.path,[m
+[32m+[m[32m          timestamp: new Date().toISOString(),[m
+[32m+[m[32m        });[m
+[32m+[m[32m      }[m
+     }[m
+   }[m
+ );[m
+[1mdiff --git a/next.config.js b/next.config.js[m
+[1mindex ff80e04..490032c 100644[m
+[1m--- a/next.config.js[m
+[1m+++ b/next.config.js[m
+[36m@@ -2,9 +2,9 @@[m
+ const nextConfig = {[m
+   // Configure Next.js for development[m
+   reactStrictMode: true,[m
+[31m-  swcMinify: true,[m
+ [m
+[31m-  // For production builds with Firebase Hosting, uncomment the following:[m
+[32m+[m[32m  // For production builds with Firebase Hosting[m
+[32m+[m[32m  // We're using a Firebase Function to serve the Next.js app, so we don't need 'export'[m
+   // output: 'export',[m
+   // images: {[m
+   //   unoptimized: true, // Required for static export if using next/image[m
+[36m@@ -14,9 +14,11 @@[m [mconst nextConfig = {[m
+   // This allows static pages to be regenerated after a certain time[m
+   // when requested, keeping content fresh without rebuilding the entire site[m
+   experimental: {[m
+[31m-    // This enables ISR-like behavior in development[m
+[31m-    isrMemoryCacheSize: 0,[m
+[32m+[m[32m    // Add experimental features here[m
+   },[m
+[32m+[m
+[32m+[m[32m  // Ensure Next.js knows it's being deployed to Firebase[m
+[32m+[m[32m  distDir: '.next',[m
+ };[m
+ [m
+ module.exports = nextConfig;[m
+[1mdiff --git a/package.json b/package.json[m
+[1mindex ee69ae5..1bc942d 100644[m
+[1m--- a/package.json[m
+[1m+++ b/package.json[m
+[36m@@ -11,10 +11,14 @@[m
+     "test": "jest",[m
+     "test:unit": "jest --testPathIgnorePatterns=rendering",[m
+     "test:rendering": "jest src/__tests__/rendering",[m
+[32m+[m[32m    "test:accounts": "jest src/__tests__/auth/test-accounts.test.js",[m
+     "test:all": "jest",[m
+     "storybook": "storybook dev -p 6006",[m
+     "build-storybook": "storybook build",[m
+[31m-    "deploy": "next build && npm run build --prefix functions && firebase deploy --debug"[m
+[32m+[m[32m    "deploy": "next build && npm run build --prefix functions && firebase deploy --only functions,hosting --debug",[m
+[32m+[m[32m    "deploy:frameworks": "firebase deploy --only hosting:foh-pro",[m
+[32m+[m[32m    "deploy:clean": "next build && firebase deploy --only hosting:foh-pro",[m
+[32m+[m[32m    "setup-test-accounts": "node scripts/setup-test-accounts.js"[m
+   },[m
+   "repository": {[m
+     "type": "git",[m
+[36m@@ -81,7 +85,9 @@[m
+     "@types/jest": "^29.5.14",[m
+     "@types/node": "^22.13.14",[m
+     "@types/react": "^19.0.12",[m
+[32m+[m[32m    "autoprefixer": "^10.4.21",[m
+     "cypress": "^14.2.1",[m
+[32m+[m[32m    "dotenv": "^16.4.7",[m
+     "eslint": "^9.23.0",[m
+     "eslint-config-next": "^15.2.4",[m
+     "jest": "^29.7.0",[m
+[36m@@ -90,12 +96,13 @@[m
+     "node-fetch": "^2.7.0",[m
+     "postcss": "^8.5.3",[m
+     "postcss-loader": "^8.1.1",[m
+[31m-    "tailwindcss": "^4.0.17",[m
+[32m+[m[32m    "tailwindcss": "^4.1.3",[m
+[32m+[m[32m    "tailwindcss-animate": "^1.0.7",[m
+     "ts-jest": "^29.3.0",[m
+     "typescript": "^5.8.2"[m
+   },[m
+   "engines": {[m
+[31m-    "node": ">=14.0.0"[m
+[32m+[m[32m    "node": "22"[m
+   },[m
+   "eslintConfig": {[m
+     "extends": "next"[m
+[36m@@ -104,5 +111,14 @@[m
+     ">0.2%",[m
+     "not dead",[m
+     "not op_mini all"[m
+[31m-  ][m
+[32m+[m[32m  ],[m
+[32m+[m[32m  "firebase": {[m
+[32m+[m[32m    "hosting": {[m
+[32m+[m[32m      "source": ".",[m
+[32m+[m[32m      "frameworksBackend": {[m
+[32m+[m[32m        "region": "us-central1",[m
+[32m+[m[32m        "invoker": "public"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }[m
+ }[m

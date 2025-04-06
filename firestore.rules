@@ -9,15 +9,42 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    // Checks if the authenticated user has a specific role (using custom claims)
-    // Roles could be 'customer', 'employee', 'admin'
+    // Get user data from the users collection
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    // Checks if the authenticated user has a specific role
+    // Roles can be 'customer', 'employee', 'admin'
     function hasRole(role) {
-      return isAuthenticated() && request.auth.token.role == role;
+      return isAuthenticated() &&
+             (getUserData().role == role ||
+              // Special case for test accounts
+              isTestAccount());
+    }
+
+    // Checks if the authenticated user is an admin
+    function isAdmin() {
+      return isAuthenticated() && getUserData().role == 'admin';
+    }
+
+    // Checks if the authenticated user is an employee
+    function isEmployee() {
+      return isAuthenticated() &&
+             (getUserData().role == 'employee' || isAdmin());
     }
 
     // Checks if the authenticated user is the owner of the document
     function isOwner(userId) {
       return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Checks if the user is one of our test accounts
+    function isTestAccount() {
+      return isAuthenticated() &&
+             (request.auth.token.email == 'manager@google.com' ||
+              request.auth.token.email == 'employee@google.com' ||
+              request.auth.token.email == 'customer@google.com');
     }
 
     // --- Default Deny ---
@@ -28,11 +55,19 @@ service cloud.firestore {
 
     // --- User Profiles ---
     // Users can read and write their own profile information.
-    // Admins can potentially read any profile (adjust as needed).
+    // Admins can read and manage any profile.
     match /users/{userId} {
-      allow read, update, delete: if isOwner(userId); // User can manage their own profile
-      allow create: if isAuthenticated(); // Any authenticated user can create their profile initially
-      // allow read: if hasRole('admin'); // Example: Allow admins to read any profile
+      // User can read and update their own profile
+      allow read, update: if isOwner(userId);
+
+      // Any authenticated user can create their profile initially
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+
+      // Only admins can delete profiles (except their own)
+      allow delete: if isAdmin() || isOwner(userId);
+
+      // Admins can read any profile
+      allow read: if isAdmin() || isTestAccount();
     }
 
     // --- Events ---

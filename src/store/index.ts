@@ -1,17 +1,45 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware'; // Optional: for debugging and persistence
+import type { PersistStorage } from 'zustand/middleware';
 import { AuthSlice, createAuthSlice } from './authSlice';
 
 // Define the shape of the combined store
 // Add other slices here as needed, e.g., CartSlice, SettingsSlice
 type StoreState = AuthSlice; // & CartSlice & SettingsSlice;
 
+// Create a custom storage object that works in both browser and SSR
+const customStorage: PersistStorage<StoreState> = {
+  getItem: (name) => {
+    if (typeof window === 'undefined') return null;
+    const value = localStorage.getItem(name);
+    // Parse the stored value to match the expected return type
+    if (value) {
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  },
+  setItem: (name, value) => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(name, JSON.stringify(value));
+    }
+  },
+  removeItem: (name) => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(name);
+    }
+  },
+};
+
 // Create the main Zustand store
 export const useStore = create<StoreState>()(
-  // Optional: Enable Redux DevTools integration
+  // Enable Redux DevTools integration
   devtools(
-    // Optional: Enable state persistence (e.g., to localStorage)
-    // persist(
+    // Enable state persistence to localStorage
+    persist(
       (...a) => ({
         // Combine all slices into the store
         ...createAuthSlice(...a),
@@ -20,10 +48,15 @@ export const useStore = create<StoreState>()(
       }),
       {
         name: 'foh-pro-store', // Name for DevTools and persistence key
-        // Optional: Specify which parts of the state to persist
-        // partialize: (state) => ({ user: state.user }),
+        // @ts-ignore - We're intentionally only persisting a subset of the state
+        partialize: (state) => ({
+          userRole: state.userRole,
+          lastKnownRole: state.lastKnownRole,
+        }),
+        // Use our custom storage implementation
+        storage: customStorage,
       }
-    // ) // End persist middleware
+    ) // End persist middleware
   ) // End devtools middleware
 );
 

@@ -20,6 +20,7 @@ Below is a **sample `README.md`** you can use as a starting point for your **foh
   - [Scripts](#scripts)
   - [Environment Variables](#environment-variables)
   - [Testing](#testing)
+  - [Test Accounts](#test-accounts)
   - [Contributing](#contributing)
   - [License](#license)
     - [Contact](#contact)
@@ -30,13 +31,13 @@ Below is a **sample `README.md`** you can use as a starting point for your **foh
 
 The **foh-pro** web application includes:
 
-1. **Marketing & Public-Facing Pages**  
+1. **Marketing & Public-Facing Pages**
    - Static/Server-Side Generated pages for SEO (Home, Services, Product Listings).
-2. **Customer Portal (SPA)**  
+2. **Customer Portal (SPA)**
    - Booking tools, event planning, live chat, social media integration, and more.
-3. **Employee Portal (SPA)**  
+3. **Employee Portal (SPA)**
    - Task assignments, equipment checklists, time tracking, and on-site support tools.
-4. **Admin Portal (SPA)**  
+4. **Admin Portal (SPA)**
    - Financial insights, employee scheduling, risk analysis, live event monitoring, and inventory restocking.
 
 All portals integrate with third-party services like **Current RMS**, **QuickBooks/Xero**, **DocuSign**, **Google Workspace**, and **social media platforms** for a holistic event production workflow.
@@ -103,13 +104,13 @@ foh-pro/
 
 ## Setup & Installation
 
-1. **Clone the Repository**  
+1. **Clone the Repository**
    ```bash
    git clone https://github.com/YourOrg/foh-pro.git
    cd foh-pro
    ```
 
-2. **Install Dependencies**  
+2. **Install Dependencies**
    ```bash
    npm install
    ```
@@ -118,13 +119,13 @@ foh-pro/
    yarn
    ```
 
-3. **Initialize Firebase** (If you’re using Firebase CLI)  
+3. **Initialize Firebase** (If you’re using Firebase CLI)
    ```bash
    firebase init
    ```
    Make sure to link your project to the correct Firebase environment.
 
-4. **Start the Development Server**  
+4. **Start the Development Server**
    ```bash
    npm run dev
    ```
@@ -145,9 +146,12 @@ foh-pro/
 | **start**      | Starts the production server (after `build`).                                   |
 | **lint**       | Runs ESLint checks to maintain code quality.                                    |
 | **test**       | Runs all tests (unit/integration/E2E if configured).                           |
+| **test:unit**  | Runs only unit tests.                                                         |
+| **test:rendering** | Runs tests for page rendering modes (SSG, SSR, CSR).                      |
 | **storybook**  | Starts Storybook locally for UI component development.                         |
 | **build-storybook** | Builds a static version of Storybook for deployment.                      |
 | **deploy**     | Custom script that can deploy the Next.js build to Firebase Hosting or Vercel. |
+| **setup-test-accounts** | Creates test accounts in Firebase for development and testing.        |
 
 Add or customize scripts in **`package.json`** as needed.
 
@@ -197,17 +201,37 @@ npm run test:e2e
 
 ---
 
+## Test Accounts
+
+The application includes pre-configured test accounts for development and testing purposes:
+
+| Email | Password | Role | Description |
+|-------|----------|------|-------------|
+| `manager@google.com` | `password123` | Admin | Full access to all features |
+| `employee@google.com` | `password123` | Employee | Access to employee portal |
+| `customer@google.com` | `password123` | Customer | Access to customer portal |
+
+To set up these test accounts in your Firebase project, run:
+
+```bash
+npm run setup-test-accounts
+```
+
+For more details, see [Test Accounts Documentation](docs/test-accounts.md).
+
+---
+
 ## Contributing
 
-1. **Fork** the repo and create your feature branch:  
+1. **Fork** the repo and create your feature branch:
    ```bash
    git checkout -b feature/amazing-feature
    ```
-2. **Commit** your changes:  
+2. **Commit** your changes:
    ```bash
    git commit -m 'Add amazing feature'
    ```
-3. **Push** to the branch:  
+3. **Push** to the branch:
    ```bash
    git push origin feature/amazing-feature
    ```
@@ -221,7 +245,7 @@ We welcome contributions that align with our project’s vision — from bug rep
 
 [MIT License](LICENSE) © 2025 foh-pro
 
-> **Note**: Replace with the actual license you intend to use (MIT, Apache, etc.).  
+> **Note**: Replace with the actual license you intend to use (MIT, Apache, etc.).
 
 ---
 
