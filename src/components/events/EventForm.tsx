@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
-import { db } from '@/lib/firebase/firebaseConfig';
+import { db, auth } from '@/lib/firebase/firebaseConfig';
 import useStore from '@/store';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,6 +26,7 @@ const EVENT_TYPES = [
 
 const EventForm: React.FC = () => {
   const router = useRouter();
+  const { user } = useStore(); // Get user from Zustand store
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -43,6 +44,33 @@ const EventForm: React.FC = () => {
   const [contactEmail, setContactEmail] = useState('');
   const [additionalDetails, setAdditionalDetails] = useState('');
 
+  // Function to populate form fields - will be exposed to window for the auto-fill button
+  const populateFormFields = (data: any) => {
+    console.log('Populating form fields with:', data);
+    if (data.eventName) setEventName(data.eventName);
+    if (data.eventType) setEventType(data.eventType);
+    if (data.eventDate) setEventDate(data.eventDate);
+    if (data.eventTime) setEventTime(data.eventTime);
+    if (data.location) setLocation(data.location);
+    if (data.estimatedAttendees) setEstimatedAttendees(data.estimatedAttendees.toString());
+    if (data.budget) setBudget(data.budget.toString());
+    if (data.contactName) setContactName(data.contactName);
+    if (data.contactPhone) setContactPhone(data.contactPhone);
+    if (data.contactEmail) setContactEmail(data.contactEmail);
+    if (data.additionalDetails) setAdditionalDetails(data.additionalDetails);
+  };
+
+  // Expose the populate function to the window object for the auto-fill button
+  useEffect(() => {
+    // @ts-ignore
+    window.populateEventForm = populateFormFields;
+
+    return () => {
+      // @ts-ignore
+      delete window.populateEventForm;
+    };
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submission started');
@@ -58,10 +86,18 @@ const EventForm: React.FC = () => {
       return;
     }
 
-    // Check if user is logged in
+    // Check if user is logged in with Firebase
     if (!auth.currentUser) {
-      console.error('User not logged in');
+      console.error('Firebase user not logged in');
       setError('You must be logged in to submit an event request.');
+      setIsLoading(false);
+      return;
+    }
+
+    // Double-check with Zustand store as well
+    if (!user) {
+      console.error('Zustand user not found');
+      setError('User session is invalid. Please log in again.');
       setIsLoading(false);
       return;
     }
@@ -77,6 +113,7 @@ const EventForm: React.FC = () => {
       const eventData = {
         id: eventId,
         userId: auth.currentUser.uid,
+        userEmail: auth.currentUser.email,
         eventName,
         eventType,
         eventDate,

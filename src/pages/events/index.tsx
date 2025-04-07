@@ -38,23 +38,25 @@ const EventsPage: React.FC = () => {
           where('userId', '==', auth.currentUser.uid),
           orderBy('createdAt', 'desc')
         );
-        
+
         const querySnapshot = await getDocs(q);
         const eventsList: Event[] = [];
-        
+
         querySnapshot.forEach((doc) => {
           const data = doc.data();
           eventsList.push({
             id: doc.id,
-            eventName: data.eventName,
-            eventType: data.eventType,
-            eventDate: data.eventDate,
-            location: data.location,
-            status: data.status,
+            eventName: data.eventName || '',
+            eventType: data.eventType || '',
+            eventDate: data.eventDate || '',
+            location: data.location || '',
+            status: data.status || 'pending',
             createdAt: data.createdAt
           });
         });
-        
+
+        console.log('Events list:', eventsList);
+
         setEvents(eventsList);
       } catch (err) {
         console.error('Error fetching events:', err);

@@ -45,7 +45,7 @@ const EventDetailPage: React.FC = () => {
         const eventDoc = await getDoc(eventRef);
 
         if (eventDoc.exists()) {
-          const eventData = eventDoc.data() as EventDetail;
+          const eventData = eventDoc.data();
 
           // Check if the current user is the owner of this event
           if (eventData.userId !== auth.currentUser.uid) {
@@ -54,7 +54,28 @@ const EventDetailPage: React.FC = () => {
             return;
           }
 
-          setEvent(eventData);
+          // Create a properly formatted event object
+          const formattedEvent: EventDetail = {
+            id: id as string,
+            userId: eventData.userId,
+            eventName: eventData.eventName || '',
+            eventType: eventData.eventType || '',
+            eventDate: eventData.eventDate || '',
+            eventTime: eventData.eventTime || '',
+            location: eventData.location || '',
+            estimatedAttendees: eventData.estimatedAttendees || 0,
+            budget: eventData.budget || 0,
+            contactName: eventData.contactName || '',
+            contactPhone: eventData.contactPhone || '',
+            contactEmail: eventData.contactEmail || '',
+            additionalDetails: eventData.additionalDetails || '',
+            status: eventData.status || 'pending',
+            createdAt: eventData.createdAt,
+            updatedAt: eventData.updatedAt
+          };
+
+          console.log('Formatted event:', formattedEvent);
+          setEvent(formattedEvent);
         } else {
           setError('Event not found.');
         }

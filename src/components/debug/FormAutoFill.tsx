@@ -107,8 +107,15 @@ const FormAutoFill: React.FC = () => {
     // Determine which form to fill based on the form type
     switch (formType) {
       case 'event':
-        fillForm(EVENT_FORM_DATA);
-        handleSpecialSelects('event');
+        // Try to use the exposed function first
+        if (typeof window !== 'undefined' && window.populateEventForm) {
+          console.log('Using exposed populateEventForm function');
+          window.populateEventForm(EVENT_FORM_DATA);
+        } else {
+          console.log('Falling back to DOM manipulation');
+          fillForm(EVENT_FORM_DATA);
+          handleSpecialSelects('event');
+        }
         break;
       case 'profile':
         fillForm(PROFILE_FORM_DATA);

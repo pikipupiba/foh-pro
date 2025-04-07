@@ -40,12 +40,17 @@ const EventDetail: React.FC<EventDetailProps> = ({ event }) => {
 
   const formatDate = (dateString: string) => {
     if (!dateString) return 'N/A';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'Invalid date';
+    }
   };
 
   const formatCurrency = (amount: number) => {
@@ -157,8 +162,10 @@ const EventDetail: React.FC<EventDetailProps> = ({ event }) => {
                   <div className="ml-12">
                     <h3 className="font-medium">Request Submitted</h3>
                     <p className="text-sm text-muted-foreground">
-                      {event.createdAt?.toDate
+                      {event.createdAt && typeof event.createdAt.toDate === 'function'
                         ? event.createdAt.toDate().toLocaleString()
+                        : event.createdAt instanceof Date
+                        ? event.createdAt.toLocaleString()
                         : 'Date not available'}
                     </p>
                     <p className="mt-1">Your event request has been submitted successfully.</p>
@@ -190,8 +197,12 @@ const EventDetail: React.FC<EventDetailProps> = ({ event }) => {
                   <div className="ml-12">
                     <h3 className="font-medium">Review & Quote</h3>
                     <p className="text-sm text-muted-foreground">
-                      {event.status !== 'pending' && event.updatedAt?.toDate
-                        ? event.updatedAt.toDate().toLocaleString()
+                      {event.status !== 'pending' && event.updatedAt
+                        ? (typeof event.updatedAt.toDate === 'function'
+                          ? event.updatedAt.toDate().toLocaleString()
+                          : event.updatedAt instanceof Date
+                            ? event.updatedAt.toLocaleString()
+                            : 'Date not available')
                         : 'Pending'}
                     </p>
                     <p className="mt-1">

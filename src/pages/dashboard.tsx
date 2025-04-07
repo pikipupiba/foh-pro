@@ -77,8 +77,8 @@ const DashboardPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Customer-specific widgets */}
-          <RoleGuard requiredRole={UserRole.CUSTOMER}>
+          {/* Role-specific widgets */}
+          {effectiveRole === UserRole.CUSTOMER && (
             <div className="bg-emerald-500/5 border-emerald-500/10 rounded-lg shadow-sm p-6 border">
               <div className="flex items-start justify-between mb-4">
                 <div>
@@ -104,10 +104,9 @@ const DashboardPage: React.FC = () => {
                 </button>
               </div>
             </div>
-          </RoleGuard>
+          )}
 
-          {/* Customer-specific widgets */}
-          <RoleGuard requiredRole={UserRole.CUSTOMER}>
+          {effectiveRole === UserRole.CUSTOMER && (
             <div className="bg-emerald-500/5 border-emerald-500/10 rounded-lg shadow-sm p-6 border">
               <div className="flex items-start justify-between mb-4">
                 <div>
@@ -125,10 +124,10 @@ const DashboardPage: React.FC = () => {
                 View Orders
               </button>
             </div>
-          </RoleGuard>
+          )}
 
-          {/* Employee-specific widgets */}
-          <RoleGuard requiredRole={UserRole.EMPLOYEE}>
+          {/* Employee widgets */}
+          {effectiveRole === UserRole.EMPLOYEE && (
             <div className="bg-blue-500/5 border-blue-500/10 rounded-lg shadow-sm p-6 border">
               <div className="flex items-start justify-between mb-4">
                 <div>
@@ -146,10 +145,9 @@ const DashboardPage: React.FC = () => {
                 Manage Events
               </button>
             </div>
-          </RoleGuard>
+          )}
 
-          {/* Employee-specific widgets */}
-          <RoleGuard requiredRole={UserRole.EMPLOYEE}>
+          {effectiveRole === UserRole.EMPLOYEE && (
             <div className="bg-blue-500/5 border-blue-500/10 rounded-lg shadow-sm p-6 border">
               <div className="flex items-start justify-between mb-4">
                 <div>
@@ -167,10 +165,9 @@ const DashboardPage: React.FC = () => {
                 View Inventory
               </button>
             </div>
-          </RoleGuard>
+          )}
 
-          {/* Employee-specific widgets */}
-          <RoleGuard requiredRole={UserRole.EMPLOYEE}>
+          {effectiveRole === UserRole.EMPLOYEE && (
             <div className="bg-blue-500/5 border-blue-500/10 rounded-lg shadow-sm p-6 border">
               <div className="flex items-start justify-between mb-4">
                 <div>
@@ -188,10 +185,10 @@ const DashboardPage: React.FC = () => {
                 View Schedule
               </button>
             </div>
-          </RoleGuard>
+          )}
 
-          {/* Admin-specific widgets */}
-          <RoleGuard requiredRole={UserRole.ADMIN}>
+          {/* Admin widgets */}
+          {effectiveRole === UserRole.ADMIN && (
             <div className="bg-rose-500/5 border-rose-500/10 rounded-lg shadow-sm p-6 border">
               <div className="flex items-start justify-between mb-4">
                 <div>
@@ -209,10 +206,9 @@ const DashboardPage: React.FC = () => {
                 Manage Users
               </button>
             </div>
-          </RoleGuard>
+          )}
 
-          {/* Admin-specific widgets */}
-          <RoleGuard requiredRole={UserRole.ADMIN}>
+          {effectiveRole === UserRole.ADMIN && (
             <div className="bg-rose-500/5 border-rose-500/10 rounded-lg shadow-sm p-6 border">
               <div className="flex items-start justify-between mb-4">
                 <div>
@@ -230,7 +226,28 @@ const DashboardPage: React.FC = () => {
                 View Analytics
               </button>
             </div>
-          </RoleGuard>
+          )}
+
+          {/* Add an admin-specific event management widget */}
+          {effectiveRole === UserRole.ADMIN && (
+            <div className="bg-rose-500/5 border-rose-500/10 rounded-lg shadow-sm p-6 border">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-lg font-medium mb-1">Event Management</h3>
+                  <p className="text-muted-foreground">Manage all customer events</p>
+                </div>
+                <div className="bg-rose-500/10 text-rose-500 p-2 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+                </div>
+              </div>
+              <button
+                onClick={() => router.push('/admin/events')}
+                className="w-full bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                Manage All Events
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>
