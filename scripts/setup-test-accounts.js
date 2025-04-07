@@ -14,25 +14,26 @@ const {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  updateProfile
+  updateProfile,
+  connectAuthEmulator
 } = require('firebase/auth');
 const {
   getFirestore,
   doc,
   setDoc,
-  getDoc
+  getDoc,
+  connectFirestoreEmulator
 } = require('firebase/firestore');
 require('dotenv').config();
 
-// Firebase configuration from environment variables
+// Firebase configuration for emulator use
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+  apiKey: "demo-foh-pro-key",
+  authDomain: "demo-foh-pro.firebaseapp.com",
+  projectId: "demo-foh-pro",
+  storageBucket: "demo-foh-pro.appspot.com",
+  messagingSenderId: "000000000000",
+  appId: "1:000000000000:web:0000000000000000000000"
 };
 
 // Initialize Firebase
@@ -40,11 +41,17 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Connect to emulators
+console.log('Connecting to Firebase emulators...');
+connectAuthEmulator(auth, 'http://localhost:9099');
+connectFirestoreEmulator(db, 'localhost', 8080);
+console.log('Connected to Firebase emulators');
+
 // User roles
 const UserRole = {
-  ADMIN: 'admin',
-  EMPLOYEE: 'employee',
-  CUSTOMER: 'customer'
+  ADMIN: 'ADMIN',
+  EMPLOYEE: 'EMPLOYEE',
+  CUSTOMER: 'CUSTOMER'
 };
 
 // Test accounts to create
@@ -134,7 +141,8 @@ async function createUserAccount(account) {
  * Main function to set up all test accounts
  */
 async function setupTestAccounts() {
-  console.log('Setting up test accounts...');
+  console.log('Setting up test accounts in Firebase emulators...');
+  console.log('Using emulators at: Auth=localhost:9099, Firestore=localhost:8080');
 
   try {
     for (const account of testAccounts) {

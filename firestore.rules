@@ -71,12 +71,28 @@ service cloud.firestore {
     }
 
     // --- Events ---
-    // Placeholder: Define rules for event data access
-    // Example: Customers can read events they are part of, employees/admins can manage all
+    // Customers can read and create their own events
+    // Employees and admins can read and manage all events
     match /events/{eventId} {
-      allow read, write: if false; // TODO: Implement specific rules
-      // allow read: if isAuthenticated(); // Example: Allow any authenticated user to read
-      // allow write: if hasRole('employee') || hasRole('admin'); // Example: Allow employees/admins to write
+      allow read: if isAuthenticated() &&
+                   (resource.data.userId == request.auth.uid ||
+                    isEmployee() ||
+                    isAdmin() ||
+                    isTestAccount());
+      allow create: if isAuthenticated() &&
+                     (request.resource.data.userId == request.auth.uid ||
+                      isEmployee() ||
+                      isAdmin() ||
+                      isTestAccount());
+      allow update: if isAuthenticated() &&
+                     (resource.data.userId == request.auth.uid ||
+                      isEmployee() ||
+                      isAdmin() ||
+                      isTestAccount());
+      allow delete: if isAuthenticated() &&
+                     (resource.data.userId == request.auth.uid ||
+                      isAdmin() ||
+                      isTestAccount());
     }
 
     // --- Rentals ---
