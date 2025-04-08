@@ -17,10 +17,11 @@ const authRoutes = [
 ];
 
 export function middleware(request: NextRequest) {
-  // Temporarily disabled for test account login
-  return NextResponse.next();
+  // For development, we'll disable the middleware to make testing easier
+  if (process.env.NODE_ENV === 'development') {
+    return NextResponse.next();
+  }
 
-  /* Original middleware code
   const { pathname } = request.nextUrl;
 
   // Get the Firebase auth session cookie
@@ -54,7 +55,6 @@ export function middleware(request: NextRequest) {
 
   // For all other routes, continue with the request
   return NextResponse.next();
-  */
 }
 
 // Configure the middleware to run only on specific paths
@@ -65,10 +65,11 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - public (public files)
+     * - logos (logo files)
+     * - images (image files)
      * - api (API routes that handle their own auth)
      */
-    '/((?!_next/static|_next/image|favicon.ico|public|api).*)',
+    '/((?!_next/static|_next/image|favicon.ico|logos|images|api).*)',
   ],
 };
 

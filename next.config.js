@@ -14,7 +14,13 @@ const nextConfig = {
   // This allows static pages to be regenerated after a certain time
   // when requested, keeping content fresh without rebuilding the entire site
   experimental: {
-    // Add experimental features here
+    // Enable App Router
+    appDir: true,
+  },
+
+  // Configure image domains
+  images: {
+    domains: ['firebasestorage.googleapis.com'],
   },
 
   // Ensure Next.js knows it's being deployed to Firebase
