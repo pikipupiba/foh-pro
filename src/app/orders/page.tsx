@@ -49,7 +49,7 @@ export default function OrdersPage() {
             </svg>
             <h2 className="text-xl font-semibold mb-2">No orders found</h2>
             <p className="text-muted-foreground text-center mb-6">
-              You haven't placed any orders yet. Create an event to get started.
+              You haven&apos;t placed any orders yet. Create an event to get started.
             </p>
             <Button onClick={() => router.push('/events/new')}>
               Create Your First Event

@@ -177,7 +177,7 @@ const EventForm: React.FC = () => {
       <CardHeader>
         <CardTitle>Tell Us About Your Event</CardTitle>
         <CardDescription>
-          Fill out the form below to get started with your event planning. We'll use this information to provide you with a customized quote.
+          Fill out the form below to get started with your event planning. We&apos;ll use this information to provide you with a customized quote.
         </CardDescription>
       </CardHeader>
       <CardContent>

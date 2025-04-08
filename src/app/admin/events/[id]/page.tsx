@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/firebaseConfig';
@@ -19,14 +19,14 @@ export default function AdminEventDetailPage({ params }: { params: { id: string 
   const [error, setError] = useState<string | null>(null);
   const isAdmin = userRole === UserRole.ADMIN;
 
-  const fetchEventDetail = async () => {
+  const fetchEventDetail = useCallback(async () => {
     if (!id) return;
 
     try {
       setIsLoading(true);
       const eventRef = doc(db, 'events', id as string);
       const eventDoc = await getDoc(eventRef);
-      
+
       if (eventDoc.exists()) {
         const eventData = eventDoc.data();
         setEvent({ id: eventDoc.id, ...eventData });
@@ -39,7 +39,7 @@ export default function AdminEventDetailPage({ params }: { params: { id: string 
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     if (!authLoading && user && id && isAdmin) {
@@ -47,7 +47,7 @@ export default function AdminEventDetailPage({ params }: { params: { id: string 
     } else if (!authLoading && !isAdmin) {
       setIsLoading(false);
     }
-  }, [id, user, authLoading, isAdmin]);
+  }, [id, user, authLoading, isAdmin, fetchEventDetail]);
 
   const handleEventUpdated = () => {
     fetchEventDetail();

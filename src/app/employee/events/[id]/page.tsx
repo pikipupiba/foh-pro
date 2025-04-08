@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/firebaseConfig';
@@ -19,14 +19,14 @@ export default function EmployeeEventDetailPage({ params }: { params: { id: stri
   const [error, setError] = useState<string | null>(null);
   const isEmployee = userRole === UserRole.EMPLOYEE || userRole === UserRole.ADMIN;
 
-  const fetchEventDetail = async () => {
+  const fetchEventDetail = useCallback(async () => {
     if (!id) return;
 
     try {
       setIsLoading(true);
       const eventRef = doc(db, 'events', id as string);
       const eventDoc = await getDoc(eventRef);
-      
+
       if (eventDoc.exists()) {
         const eventData = eventDoc.data();
         setEvent({ id: eventDoc.id, ...eventData });
@@ -39,13 +39,13 @@ export default function EmployeeEventDetailPage({ params }: { params: { id: stri
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     if (!authLoading && user && id) {
       fetchEventDetail();
     }
-  }, [id, user, authLoading]);
+  }, [id, user, authLoading, fetchEventDetail]);
 
   const handleEventUpdated = () => {
     fetchEventDetail();

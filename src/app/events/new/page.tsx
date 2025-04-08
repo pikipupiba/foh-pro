@@ -38,7 +38,7 @@ export default function NewEventPage() {
         </Button>
         <h1 className="text-3xl font-bold">New Event Request</h1>
         <p className="text-muted-foreground mt-1">
-          Tell us about your event and we'll help you make it happen.
+          Tell us about your event and we&apos;ll help you make it happen.
         </p>
       </div>
 

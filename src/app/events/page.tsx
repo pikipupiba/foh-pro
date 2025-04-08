@@ -160,7 +160,7 @@ export default function EventsPage() {
               </svg>
               <h2 className="text-xl font-semibold mb-2">No events found</h2>
               <p className="text-muted-foreground text-center mb-6">
-                You haven't created any event requests yet. Create your first event to get started.
+                You haven&apos;t created any event requests yet. Create your first event to get started.
               </p>
               <Button onClick={() => router.push('/events/new')}>
                 Create Your First Event

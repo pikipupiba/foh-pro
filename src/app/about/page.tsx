@@ -28,7 +28,7 @@ export default function AboutPage() {
             for events of all sizes.
           </p>
           <p>
-            Whether you're planning a corporate conference, a music festival, a wedding, or a community gathering,
+            Whether you&apos;re planning a corporate conference, a music festival, a wedding, or a community gathering,
             we have the expertise and resources to make your event shine. Our mission is to exceed your expectations
             and create memorable experiences through innovative solutions and attention to detail.
           </p>
@@ -72,7 +72,7 @@ export default function AboutPage() {
         <h2 className="text-2xl font-semibold mb-6">Our Story</h2>
         <p className="mb-4">
           Founded in 2010, FOH Pro began as a small operation serving local community events. Over the years,
-          we've grown into a full-service production company with a reputation for excellence and reliability.
+          we&apos;ve grown into a full-service production company with a reputation for excellence and reliability.
           Our founder, with over 20 years of experience in the industry, assembled a team of passionate professionals
           who share a commitment to quality and customer satisfaction.
         </p>
@@ -90,7 +90,7 @@ export default function AboutPage() {
       <div className="text-center">
         <h2 className="text-2xl font-semibold mb-6">Ready to Work With Us?</h2>
         <p className="mb-8">
-          Let's create an unforgettable event together. Contact us today to discuss your needs and how we can help.
+          Let&apos;s create an unforgettable event together. Contact us today to discuss your needs and how we can help.
         </p>
         <Link
           href="/contact"

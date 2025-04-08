@@ -15,17 +15,17 @@ export default function ContactForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       // TODO: Implement actual form submission logic (e.g., send to an API endpoint or Firebase function)
       console.log('Form submitted:', formData);
-      
+
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       setSubmitSuccess(true);
       setFormData({ name: '', email: '', message: '' }); // Reset form
-      
+
       // Reset success message after 5 seconds
       setTimeout(() => {
         setSubmitSuccess(false);
@@ -44,7 +44,7 @@ export default function ContactForm() {
         <div className="text-center py-8">
           <div className="text-lime-600 dark:text-lime-400 text-5xl mb-4">✓</div>
           <h3 className="text-xl font-semibold mb-2">Thank You!</h3>
-          <p>Your message has been sent successfully. We'll get back to you shortly.</p>
+          <p>Your message has been sent successfully. We&apos;ll get back to you shortly.</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
