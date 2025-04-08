@@ -1,8 +1,15 @@
 // Define user roles
 export enum UserRole {
-  CUSTOMER = 'customer',
-  EMPLOYEE = 'employee',
-  ADMIN = 'admin',
+  CUSTOMER = 'CUSTOMER',
+  EMPLOYEE = 'EMPLOYEE',
+  ADMIN = 'ADMIN',
+}
+
+// Map for display names
+export const roleDisplayNames = {
+  [UserRole.CUSTOMER]: 'Customer',
+  [UserRole.EMPLOYEE]: 'Employee',
+  [UserRole.ADMIN]: 'Administrator',
 }
 
 // Define permissions for each role
@@ -51,13 +58,13 @@ export const hasPermission = (userRole: UserRole | undefined, permission: string
 // Helper function to check if a user has a specific role
 export const hasRole = (userRole: UserRole | undefined, role: UserRole): boolean => {
   if (!userRole) return false;
-  
+
   // Admin has all roles
   if (userRole === UserRole.ADMIN) return true;
-  
+
   // Employee has customer role
   if (userRole === UserRole.EMPLOYEE && role === UserRole.CUSTOMER) return true;
-  
+
   // Direct match
   return userRole === role;
 };

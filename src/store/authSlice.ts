@@ -51,15 +51,20 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (set,
   setUser: (user) => set({ user, isLoading: false, error: null }),
 
   setUserRole: (role) => {
+    console.log('setUserRole called with:', role);
+
     // When setting a role, also update lastKnownRole if the role is valid
     if (role) {
+      console.log('Setting userRole and lastKnownRole to:', role);
       set({ userRole: role, lastKnownRole: role });
 
       // Also save to sessionStorage for cross-page persistence
       if (typeof window !== 'undefined') {
+        console.log('Saving role to sessionStorage:', role);
         sessionStorage.setItem('lastUserRole', role);
       }
     } else {
+      console.log('Setting userRole to null, preserving lastKnownRole');
       set({ userRole: role }); // Only update userRole, preserve lastKnownRole
     }
   },
@@ -69,20 +74,35 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (set,
   getEffectiveRole: () => {
     // First try the current userRole
     const { userRole, lastKnownRole } = get();
-    if (userRole) return userRole;
+    console.log('getEffectiveRole - userRole:', userRole);
+    console.log('getEffectiveRole - lastKnownRole:', lastKnownRole);
+
+    if (userRole) {
+      console.log('Using userRole:', userRole);
+      return userRole;
+    }
 
     // Then try lastKnownRole from state
-    if (lastKnownRole) return lastKnownRole;
+    if (lastKnownRole) {
+      console.log('Using lastKnownRole:', lastKnownRole);
+      return lastKnownRole;
+    }
 
     // Then try sessionStorage
     if (typeof window !== 'undefined') {
       const savedRole = sessionStorage.getItem('lastUserRole') as UserRole | null;
+      console.log('sessionStorage role:', savedRole);
+
       if (savedRole && Object.values(UserRole).includes(savedRole as UserRole)) {
+        console.log('Using sessionStorage role:', savedRole);
+        // Update the lastKnownRole in state to match sessionStorage
+        get().setLastKnownRole(savedRole as UserRole);
         return savedRole as UserRole;
       }
     }
 
     // Default to null if no role is found
+    console.log('No role found, returning null');
     return null;
   },
 
@@ -94,21 +114,40 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (set,
     try {
       if (!db) return null;
 
-      // Get user document from Firestore
+      // First check if we have a role in sessionStorage
+      if (typeof window !== 'undefined') {
+        const savedRole = sessionStorage.getItem('lastUserRole') as UserRole | null;
+        if (savedRole && Object.values(UserRole).includes(savedRole as UserRole)) {
+          console.log('Using role from sessionStorage:', savedRole);
+          // Update both userRole and lastKnownRole
+          set({ userRole: savedRole as UserRole, lastKnownRole: savedRole as UserRole });
+          return savedRole as UserRole;
+        }
+      }
+
+      // If no role in sessionStorage, get user document from Firestore
       const userDoc = await getDoc(doc(db, 'users', userId));
 
       if (userDoc.exists()) {
         const userData = userDoc.data();
         const role = userData.role as UserRole;
+        console.log('Fetched role from Firestore:', role);
 
-        // Update role in state
-        set({ userRole: role });
+        // Update role in state and sessionStorage
+        set({ userRole: role, lastKnownRole: role });
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('lastUserRole', role);
+        }
         return role;
       }
 
       // If no user document exists, default to customer role
       const defaultRole = UserRole.CUSTOMER;
-      set({ userRole: defaultRole });
+      console.log('No user document, defaulting to:', defaultRole);
+      set({ userRole: defaultRole, lastKnownRole: defaultRole });
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('lastUserRole', defaultRole);
+      }
       return defaultRole;
     } catch (error) {
       console.error('Error fetching user role:', error);
@@ -141,19 +180,35 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (set,
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       console.log('Auth state changed:', user?.uid ?? 'No user');
 
+      // Check for a role in sessionStorage first
+      let roleFromSession = null;
+      if (typeof window !== 'undefined') {
+        const savedRole = sessionStorage.getItem('lastUserRole') as UserRole | null;
+        if (savedRole && Object.values(UserRole).includes(savedRole as UserRole)) {
+          console.log('Found role in sessionStorage:', savedRole);
+          roleFromSession = savedRole as UserRole;
+        }
+      }
+
       if (user) {
         // Set user immediately to update UI
         set({ user, isLoading: true });
 
-        // Fetch user role
-        try {
-          await get().fetchUserRole(user.uid);
-        } catch (error) {
-          console.error('Error fetching user role:', error);
-        }
+        // If we have a role from sessionStorage, use it
+        if (roleFromSession) {
+          console.log('Using role from sessionStorage:', roleFromSession);
+          set({ userRole: roleFromSession, lastKnownRole: roleFromSession, isLoading: false });
+        } else {
+          // Otherwise fetch user role from Firestore
+          try {
+            await get().fetchUserRole(user.uid);
+          } catch (error) {
+            console.error('Error fetching user role:', error);
+          }
 
-        // Update loading state
-        set({ isLoading: false, error: null });
+          // Update loading state
+          set({ isLoading: false, error: null });
+        }
       } else {
         // No user, but preserve the lastKnownRole
         const { lastKnownRole } = get();

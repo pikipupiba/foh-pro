@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import FormAutoFill from '@/components/debug/FormAutoFill';
 import { UserRole } from '@/lib/auth/roles';
 import useStore from '@/store';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/lib/firebase/firebaseConfig';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { auth, db } from '@/lib/firebase/firebaseConfig';
+import { initializeTestAccounts } from '@/lib/firebase/initTestAccounts';
 
 // Test account credentials
 const TEST_ACCOUNTS = [
@@ -38,6 +39,26 @@ const EnvironmentIndicator: React.FC = () => {
   const router = useRouter();
   const { user, setUserRole, setLastKnownRole, setUser, setLoading } = useStore();
   const [isLoading, setIsLoading] = useState<string | null>(null);
+  const [accountsInitialized, setAccountsInitialized] = useState<boolean>(false);
+
+  // Initialize test accounts when in development mode and using emulators
+  const initAccounts = useCallback(async () => {
+    if (process.env.NODE_ENV !== 'production' &&
+        process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATORS === 'true' &&
+        !accountsInitialized) {
+      try {
+        await initializeTestAccounts();
+        setAccountsInitialized(true);
+      } catch (error) {
+        console.error('Failed to initialize test accounts:', error);
+      }
+    }
+  }, [accountsInitialized]);
+
+  // Call initAccounts when the component mounts
+  useEffect(() => {
+    initAccounts();
+  }, [initAccounts]);
 
   // Only show in development mode
   if (process.env.NODE_ENV === 'production') {
@@ -47,6 +68,7 @@ const EnvironmentIndicator: React.FC = () => {
   // Login function that uses Firebase authentication with test accounts
   const handleDirectLogin = async (role: UserRole, label: string, email: string, password: string) => {
     setIsLoading(label);
+    console.log(`Attempting to log in as ${label} with role: ${role}`);
 
     try {
       if (!auth) {
@@ -54,20 +76,65 @@ const EnvironmentIndicator: React.FC = () => {
         return;
       }
 
-      // Sign in with Firebase authentication
-      await signInWithEmailAndPassword(auth, email, password);
-      console.log(`Successfully logged in as ${label}`);
+      // Check if emulators are running
+      const emulatorsRunning = process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATORS === 'true' &&
+                              process.env.NODE_ENV !== 'production';
+      console.log(`Emulators running: ${emulatorsRunning}`);
 
-      // The auth state listener in the store will handle updating the user and role
-      // We just need to make sure the role is set correctly
+      // First, explicitly set the role in sessionStorage
+      if (typeof window !== 'undefined') {
+        console.log(`Setting role in sessionStorage: ${role}`);
+        sessionStorage.setItem('lastUserRole', role);
+      }
+
+      // Set the role in the store
+      console.log(`Setting role in store: ${role}`);
       setUserRole(role);
       setLastKnownRole(role);
+
+      // Sign in with Firebase authentication
+      console.log(`Signing in with email: ${email}`);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log(`Successfully logged in as ${label}`, userCredential.user);
+
+      // Force update the store state directly to ensure all properties are set correctly
+      useStore.setState(state => ({
+        ...state,
+        user: userCredential.user,
+        userRole: role,
+        lastKnownRole: role,
+        isLoading: false
+      }));
+
+      // Double-check that the role is set correctly
+      console.log(`Role after login: ${useStore.getState().userRole}`);
+      console.log(`Last known role after login: ${useStore.getState().lastKnownRole}`);
 
       // Navigate to the dashboard
       router.push('/dashboard');
     } catch (err: any) {
       console.error(`Login failed for ${label}:`, err);
-      alert(`Failed to login as ${label}. Error: ${err.message}`);
+
+      // Handle different error types
+      if (err.code === 'auth/network-request-failed') {
+        alert(`Failed to login as ${label}. Error: Network request failed. Make sure Firebase emulators are running.`);
+      } else if (err.code === 'auth/user-not-found') {
+        // If user not found, try to initialize test accounts and try again
+        alert(`Test account ${email} not found. Attempting to create test accounts...`);
+        try {
+          await initializeTestAccounts();
+          setAccountsInitialized(true);
+          alert(`Test accounts created. Please try logging in again.`);
+        } catch (initError) {
+          console.error('Failed to initialize test accounts:', initError);
+          alert(`Failed to create test accounts. Please check the console for details.`);
+        }
+      } else {
+        alert(`Failed to login as ${label}. Error: ${err.message}`);
+      }
+
+      // Reset the role in the store
+      setUserRole(null);
     } finally {
       setIsLoading(null);
     }

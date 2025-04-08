@@ -9,7 +9,7 @@ import { signOut } from 'firebase/auth';
 import { LogOut, User, Settings, LayoutDashboard } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserRole } from '@/lib/auth/roles';
+import { UserRole, roleDisplayNames } from '@/lib/auth/roles';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +22,8 @@ import {
 const AuthStatus: React.FC = () => {
   const { user, userRole, isLoading, getEffectiveRole } = useStore();
   const effectiveRole = getEffectiveRole();
+  console.log('AuthStatus - userRole:', userRole);
+  console.log('AuthStatus - effectiveRole:', effectiveRole);
   const router = useRouter();
 
   const { setUser, setUserRole, setLastKnownRole } = useStore();
@@ -127,9 +129,7 @@ const AuthStatus: React.FC = () => {
                   </p>
                   {effectiveRole && (
                     <p className="text-xs font-medium text-primary mt-1">
-                      {effectiveRole === UserRole.ADMIN ? 'Administrator' :
-                       effectiveRole === UserRole.EMPLOYEE ? 'Employee' :
-                       'Customer'}
+                      {roleDisplayNames[effectiveRole]}
                     </p>
                   )}
                 </div>

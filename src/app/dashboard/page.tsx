@@ -3,14 +3,28 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import useStore from '@/store';
-import { UserRole } from '@/lib/auth/roles';
+import { UserRole, roleDisplayNames } from '@/lib/auth/roles';
 
 export default function DashboardPage() {
-  const { user, userRole, isLoading, getEffectiveRole } = useStore();
+  const { user, userRole, lastKnownRole, isLoading, getEffectiveRole } = useStore();
   const router = useRouter();
 
   // Get the effective role (userRole, lastKnownRole, or from sessionStorage)
-  const effectiveRole = getEffectiveRole();
+  // First check sessionStorage directly
+  let roleFromSession = null;
+  if (typeof window !== 'undefined') {
+    const savedRole = sessionStorage.getItem('lastUserRole') as UserRole | null;
+    if (savedRole && Object.values(UserRole).includes(savedRole as UserRole)) {
+      console.log('Dashboard - Found role in sessionStorage:', savedRole);
+      roleFromSession = savedRole as UserRole;
+    }
+  }
+
+  // Use the role from sessionStorage if available, otherwise use getEffectiveRole
+  const effectiveRole = roleFromSession || getEffectiveRole();
+  console.log('Dashboard - userRole:', userRole);
+  console.log('Dashboard - lastKnownRole:', lastKnownRole);
+  console.log('Dashboard - effectiveRole:', effectiveRole);
 
   useEffect(() => {
     // For development/testing, we'll allow direct access to the dashboard
@@ -41,6 +55,7 @@ export default function DashboardPage() {
               {effectiveRole === UserRole.ADMIN ? 'Admin Dashboard' :
               effectiveRole === UserRole.EMPLOYEE ? 'Employee Dashboard' :
               'Customer Dashboard'}
+              {/* Role: {effectiveRole} */}
             </h1>
             <p className="text-muted-foreground mt-1">
               {effectiveRole === UserRole.ADMIN ? 'Manage your business operations' :

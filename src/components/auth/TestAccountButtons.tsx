@@ -44,6 +44,8 @@ const TestAccountButtons: React.FC = () => {
   // Direct login function that bypasses Firebase authentication
   const handleDirectLogin = (role: UserRole, label: string, email: string) => {
     console.log(`Direct login as ${label} with role: ${role}`);
+    console.log('Role type:', typeof role);
+    console.log('Role value:', role);
     setIsLoading(label);
     setError(null);
 
@@ -74,9 +76,20 @@ const TestAccountButtons: React.FC = () => {
 
       // Set the user and role in the store
       setUser(mockUser as any);
-      setUserRole(role); // This will also update lastKnownRole and sessionStorage
-      setLastKnownRole(role); // Explicitly set lastKnownRole as a backup
-      setLoading(false);
+
+      // Force update the store state directly
+      useStore.setState({
+        user: mockUser as any,
+        userRole: role,
+        lastKnownRole: role,
+        isLoading: false
+      });
+
+      // Explicitly save to sessionStorage for cross-page persistence
+      if (typeof window !== 'undefined') {
+        console.log(`Saving role to sessionStorage: ${role}`);
+        sessionStorage.setItem('lastUserRole', role);
+      }
 
       console.log('Test account login successful:', {
         role,
