@@ -1,5 +1,8 @@
 'use client';
 
+// Force client-side rendering
+export const dynamic = 'force-dynamic';
+
 import React from 'react';
 import ProfileForm from '@/components/profile/ProfileForm';
 import { useStore } from '@/store';

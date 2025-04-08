@@ -1,5 +1,8 @@
 'use client';
 
+// Force client-side rendering
+export const dynamic = 'force-dynamic';
+
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { collection, query, orderBy, getDocs } from 'firebase/firestore';
@@ -25,10 +28,10 @@ export default function EmployeeEventsPage() {
           eventsRef,
           orderBy('createdAt', 'desc')
         );
-        
+
         const querySnapshot = await getDocs(q);
         const eventsList = [];
-        
+
         querySnapshot.forEach((doc) => {
           const data = doc.data();
           eventsList.push({
@@ -36,7 +39,7 @@ export default function EmployeeEventsPage() {
             ...data,
           });
         });
-        
+
         setEvents(eventsList);
       } catch (err) {
         console.error('Error fetching events:', err);
@@ -66,10 +69,10 @@ export default function EmployeeEventsPage() {
       </div>
 
       {isEmployee ? (
-        <EventsList 
-          events={events} 
-          isLoading={isLoading} 
-          error={error} 
+        <EventsList
+          events={events}
+          isLoading={isLoading}
+          error={error}
         />
       ) : (
         <div className="bg-yellow-50 text-yellow-800 p-4 rounded-md border border-yellow-200">

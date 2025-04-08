@@ -1,5 +1,8 @@
 'use client';
 
+// Force client-side rendering
+export const dynamic = 'force-dynamic';
+
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { collection, query, getDocs, where } from 'firebase/firestore';
