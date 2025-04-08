@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useState, FormEvent } from 'react';
-import { useRouter } from 'next/router'; // For redirection after login
+import { useRouter } from 'next/navigation'; // For redirection after login
 import Link from 'next/link'; // For forgot password link
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase/firebaseConfig'; // Firebase auth instance

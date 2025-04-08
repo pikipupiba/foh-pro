@@ -1,3 +1,5 @@
+'use client';
+
 import { StateCreator } from 'zustand';
 import { User, onAuthStateChanged, onIdTokenChanged, Unsubscribe } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';

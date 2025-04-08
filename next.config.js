@@ -13,14 +13,19 @@ const nextConfig = {
   // Add revalidate time for Incremental Static Regeneration (ISR)
   // This allows static pages to be regenerated after a certain time
   // when requested, keeping content fresh without rebuilding the entire site
-  experimental: {
-    // Enable App Router
-    appDir: true,
-  },
+  // Add experimental features here if needed
+  experimental: {},
 
   // Configure image domains
   images: {
-    domains: ['firebasestorage.googleapis.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
 
   // Ensure Next.js knows it's being deployed to Firebase

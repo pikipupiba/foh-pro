@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import FormAutoFill from '@/components/debug/FormAutoFill';
 import { UserRole } from '@/lib/auth/roles';

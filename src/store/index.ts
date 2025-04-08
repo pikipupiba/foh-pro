@@ -1,3 +1,5 @@
+'use client';
+
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware'; // Optional: for debugging and persistence
 import type { PersistStorage } from 'zustand/middleware';

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { 
   collection, 
@@ -14,7 +16,7 @@ import {
 } from 'firebase/auth';
 import { db, auth } from '@/lib/firebase/firebaseConfig';
 
-const EmulatorTestPage: React.FC = () => {
+export default function EmulatorTestPage() {
   // Firestore test states
   const [firestoreStatus, setFirestoreStatus] = useState<string>('');
   const [firestoreData, setFirestoreData] = useState<any[]>([]);
@@ -278,6 +280,4 @@ const EmulatorTestPage: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default EmulatorTestPage;
+}

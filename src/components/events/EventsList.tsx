@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -61,14 +63,14 @@ const EventsList: React.FC<EventsListProps> = ({ events, isLoading, error }) => 
 
   // Filter events based on search term and filters
   const filteredEvents = events.filter(event => {
-    const matchesSearch = 
+    const matchesSearch =
       event.eventName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.contactName.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchesStatus = statusFilter === 'all' || event.status === statusFilter;
     const matchesType = typeFilter === 'all' || event.eventType === typeFilter;
-    
+
     return matchesSearch && matchesStatus && matchesType;
   });
 
@@ -84,7 +86,7 @@ const EventsList: React.FC<EventsListProps> = ({ events, isLoading, error }) => 
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        
+
         <div>
           <Label htmlFor="statusFilter">Filter by Status</Label>
           <Select
@@ -103,7 +105,7 @@ const EventsList: React.FC<EventsListProps> = ({ events, isLoading, error }) => 
             </SelectContent>
           </Select>
         </div>
-        
+
         <div>
           <Label htmlFor="typeFilter">Filter by Type</Label>
           <Select

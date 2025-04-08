@@ -1,6 +1,8 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import useStore from '@/store';
 import { auth } from '@/lib/firebase/firebaseConfig';
 import { signOut } from 'firebase/auth';
@@ -38,7 +40,7 @@ const AuthStatus: React.FC = () => {
       }
 
       console.log('Mock user logged out');
-      router.push('/');
+      router.replace('/');
       return;
     }
 
@@ -61,7 +63,7 @@ const AuthStatus: React.FC = () => {
       console.log('User logged out successfully');
 
       // Redirect to home page after logout
-      router.push('/');
+      router.replace('/');
     } catch (error) {
       console.error('Error logging out:', error);
       // Optionally update the store with the error

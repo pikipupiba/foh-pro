@@ -1,9 +1,11 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
 import {
   db,
   auth,
   storage
-} from '../lib/firebase/firebaseConfig'; // Import Firestore, Auth, Storage instances
+} from '@/lib/firebase/firebaseConfig'; // Import Firestore, Auth, Storage instances
 import {
   collection,
   addDoc,
@@ -48,7 +50,7 @@ const Input: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = ({ classNam
   />
 );
 
-const FirebaseTestPage: React.FC = () => {
+export default function FirebaseTestPage() {
   // --- Auth State ---
   const [user, setUser] = useState<User | null>(null);
   const [authStatus, setAuthStatus] = useState<string>('Initializing...');
@@ -423,6 +425,4 @@ const FirebaseTestPage: React.FC = () => {
       </section>
     </div>
   );
-};
-
-export default FirebaseTestPage;
+}

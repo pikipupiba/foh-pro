@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { doc, updateDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase/firebaseConfig';
@@ -43,13 +45,13 @@ const EventManagement: React.FC<EventManagementProps> = ({ event, onEventUpdated
 
     try {
       const eventRef = doc(db, 'events', event.id);
-      
+
       await updateDoc(eventRef, {
         status,
         employeeNotes: notes,
         updatedAt: Timestamp.now()
       });
-      
+
       setSuccess('Event updated successfully!');
       onEventUpdated();
     } catch (err) {
@@ -76,13 +78,13 @@ const EventManagement: React.FC<EventManagementProps> = ({ event, onEventUpdated
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
-        
+
         {success && (
           <Alert className="bg-green-50 text-green-800 border-green-200">
             <AlertDescription>{success}</AlertDescription>
           </Alert>
         )}
-        
+
         <div className="space-y-2">
           <Label htmlFor="status">Update Status</Label>
           <Select
@@ -101,7 +103,7 @@ const EventManagement: React.FC<EventManagementProps> = ({ event, onEventUpdated
             </SelectContent>
           </Select>
         </div>
-        
+
         <div className="space-y-2">
           <Label htmlFor="notes">Employee Notes (not visible to customer)</Label>
           <Textarea
@@ -115,8 +117,8 @@ const EventManagement: React.FC<EventManagementProps> = ({ event, onEventUpdated
         </div>
       </CardContent>
       <CardFooter>
-        <Button 
-          onClick={handleUpdateEvent} 
+        <Button
+          onClick={handleUpdateEvent}
           disabled={isLoading}
           className="w-full"
         >

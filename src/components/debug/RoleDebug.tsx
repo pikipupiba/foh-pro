@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useRef } from 'react';
 import useStore from '@/store';
 import { UserRole } from '@/lib/auth/roles';
