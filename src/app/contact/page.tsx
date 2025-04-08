@@ -1,78 +1,78 @@
-'use client';
+import React from 'react';
+import ContactForm from '@/components/contact/ContactForm';
+import { generateMetadata } from '../metadata';
 
-import React, { useState } from 'react';
+// Generate metadata for SEO
+export const metadata = generateMetadata(
+  'Contact Us',
+  'Get in touch with Front of House Productions for event production services and support'
+);
+
+// Mark this page as statically rendered
+export const dynamic = 'force-static';
 
 export default function ContactPage() {
-  // Basic form state handling
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: Implement actual form submission logic (e.g., send to an API endpoint or Firebase function)
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message! (Submission logic not yet implemented)');
-    setFormData({ name: '', email: '', message: '' }); // Reset form
-  };
-
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">
+    <div className="container mx-auto px-4 py-12 max-w-5xl">
+      <h1 className="text-4xl font-bold mb-8 text-center">
         Contact Us
       </h1>
-      <p className="mb-6">
-        Have questions or need assistance? Fill out the form below, and we&apos;ll get back to you shortly.
-      </p>
 
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-lg">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium">Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-foh-lime focus:border-foh-lime sm:text-sm"
-          />
+          <h2 className="text-2xl font-semibold mb-6">Get In Touch</h2>
+          <p className="mb-6">
+            Have questions or need assistance? Fill out the form, and we&apos;ll get back to you shortly.
+            We&apos;re here to help with all your event production needs.
+          </p>
+
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-lg font-semibold text-lime-600 dark:text-lime-400">Our Office</h3>
+              <p>123 Event Avenue, Suite 200<br />Nashville, TN 37203</p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-lime-600 dark:text-lime-400">Phone</h3>
+              <p>(615) 555-1234</p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-lime-600 dark:text-lime-400">Email</h3>
+              <p>info@fohpro.com</p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-lime-600 dark:text-lime-400">Hours</h3>
+              <p>Monday - Friday: 9:00 AM - 6:00 PM<br />Saturday: 10:00 AM - 4:00 PM<br />Sunday: Closed</p>
+            </div>
+          </div>
         </div>
+
         <div>
-          <label htmlFor="email" className="block text-sm font-medium">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-foh-lime focus:border-foh-lime sm:text-sm"
-          />
+          <ContactForm />
         </div>
-        <div>
-          <label htmlFor="message" className="block text-sm font-medium">Message</label>
-          <textarea
-            id="message"
-            name="message"
-            rows={4}
-            value={formData.message}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-foh-lime focus:border-foh-lime sm:text-sm"
-          />
+      </div>
+
+      <div className="mb-16">
+        <h2 className="text-2xl font-semibold mb-6 text-center">Frequently Asked Questions</h2>
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-lg font-semibold">How far in advance should I book equipment?</h3>
+            <p>We recommend booking at least 4-6 weeks in advance for most events, and 2-3 months for large events or during peak season.</p>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold">Do you provide setup and teardown services?</h3>
+            <p>Yes, we offer complete setup and teardown services for all our equipment. Our technicians ensure everything is properly installed and functioning before your event.</p>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold">What happens if equipment fails during my event?</h3>
+            <p>We provide 24/7 emergency support for all events. Our technicians can be on-site quickly to resolve any issues, and we always bring backup equipment for critical systems.</p>
+          </div>
         </div>
-        <div>
-          <button
-            type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-bold text-black bg-foh-lime hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-foh-lime transition-colors"
-          >
-            Send Message
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }

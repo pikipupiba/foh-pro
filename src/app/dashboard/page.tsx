@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import useStore from '@/store';
 import { UserRole, roleDisplayNames } from '@/lib/auth/roles';
+import DashboardWrapper from '@/components/dashboard/DashboardWrapper';
 
 export default function DashboardPage() {
-  const { user, userRole, lastKnownRole, isLoading, getEffectiveRole } = useStore();
+  const { userRole, getEffectiveRole } = useStore();
   const router = useRouter();
 
   // Get the effective role (userRole, lastKnownRole, or from sessionStorage)
@@ -23,30 +24,12 @@ export default function DashboardPage() {
   // Use the role from sessionStorage if available, otherwise use getEffectiveRole
   const effectiveRole = roleFromSession || getEffectiveRole();
   console.log('Dashboard - userRole:', userRole);
-  console.log('Dashboard - lastKnownRole:', lastKnownRole);
   console.log('Dashboard - effectiveRole:', effectiveRole);
-
-  useEffect(() => {
-    // For development/testing, we'll allow direct access to the dashboard
-    // In production, this would redirect to login if not authenticated
-    if (process.env.NODE_ENV === 'production' && !isLoading && !user) {
-      console.log('User not authenticated, redirecting to login...');
-      router.replace('/login'); // Use replace to avoid adding dashboard to history
-    }
-  }, [user, isLoading, router]);
-
-  // Show loading state while checking auth
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
 
   // In development, we'll render the dashboard even if not authenticated
   // In production, this would only render if authenticated
   return (
+    <DashboardWrapper>
     <div className="container mx-auto px-4 py-8">
       <div className={`rounded-lg p-6 mb-6 border ${effectiveRole === UserRole.ADMIN ? 'bg-rose-500/10 border-rose-500/20' : effectiveRole === UserRole.EMPLOYEE ? 'bg-blue-500/10 border-blue-500/20' : 'bg-emerald-500/10 border-emerald-500/20'}`}>
         <div className="flex items-center justify-between">
@@ -268,5 +251,6 @@ export default function DashboardPage() {
         )}
       </div>
     </div>
+    </DashboardWrapper>
   );
 }

@@ -137,6 +137,47 @@ foh-pro/
 
 ---
 
+## Firebase Emulators
+
+This project uses Firebase emulators for local development and testing. The emulators provide local versions of Firebase services (Authentication, Firestore, Functions, Storage) that run on your development machine.
+
+### Starting Emulators with Persistence
+
+To start the Firebase emulators with data persistence (recommended for development):
+
+```bash
+npm run emulators:persist
+```
+
+This will:
+- Start all configured Firebase emulators
+- Import existing data from the `firebase-emulator-data` directory (if available)
+- Export data to the `firebase-emulator-data` directory when the emulators are stopped
+
+### Test Accounts
+
+The following test accounts are automatically created in the Auth emulator:
+
+- **Manager**: manager@google.com / password123
+- **Employee**: employee@google.com / password123
+- **Customer**: customer@google.com / password123
+
+These accounts are created with the appropriate roles in Firestore when you first attempt to log in with them using the dev bar at the bottom of the screen.
+
+### Emulator UI
+
+The Emulator UI is available at [http://localhost:4000](http://localhost:4000) when the emulators are running. This provides a visual interface to:
+
+- View and manage Firestore data
+- Monitor authentication state and users
+- Test Cloud Functions
+- View Storage files
+- Monitor logs and requests
+
+For more detailed information about the Firebase emulators, see the [EMULATORS.md](EMULATORS.md) file.
+
+---
+
 ## Scripts
 
 | Script         | Description                                                                     |
@@ -152,6 +193,8 @@ foh-pro/
 | **build-storybook** | Builds a static version of Storybook for deployment.                      |
 | **deploy**     | Custom script that can deploy the Next.js build to Firebase Hosting or Vercel. |
 | **setup-test-accounts** | Creates test accounts in Firebase for development and testing.        |
+| **emulators**  | Starts Firebase emulators (Auth, Firestore, Functions, Storage).       |
+| **emulators:persist** | Starts Firebase emulators with data persistence between sessions.      |
 
 Add or customize scripts in **`package.json`** as needed.
 

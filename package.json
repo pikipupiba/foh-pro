@@ -18,6 +18,8 @@
     "test:all": "jest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "emulators": "firebase emulators:start",
+    "emulators:persist": "firebase emulators:start --import=./firebase-emulator-data --export-on-exit=./firebase-emulator-data",
     "deploy": "next build && npm run build --prefix functions && firebase deploy --only functions,hosting --debug",
     "deploy:frameworks": "firebase deploy --only hosting:foh-pro",
     "deploy:clean": "next build && firebase deploy --only hosting:foh-pro",
