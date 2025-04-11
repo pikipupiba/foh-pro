@@ -16,12 +16,14 @@ service cloud.firestore {
 
     // Checks if the authenticated user has a specific role
     // Roles can be 'customer', 'employee', 'admin'
-    function hasRole(role) {
-      return isAuthenticated() &&
-             (getUserData().role == role ||
-              // Special case for test accounts
-              isTestAccount());
-    }
+    // This function is used in commented code below for reference
+    // Uncomment when implementing the related rules
+    // function hasRole(role) {
+    //   return isAuthenticated() &&
+    //          (getUserData().role == role ||
+    //           // Special case for test accounts
+    //           isTestAccount());
+    // }
 
     // Checks if the authenticated user is an admin
     function isAdmin() {
@@ -51,6 +53,13 @@ service cloud.firestore {
     // Deny all reads/writes by default unless explicitly allowed by other rules
     match /{document=**} {
       allow read, write: if false;
+    }
+
+    // --- Public Data ---
+    // Allow public read access to specific collections that should be visible to all users
+    match /public/{document=**} {
+      allow read: if true; // Anyone can read public data
+      allow write: if isAdmin(); // Only admins can write to public data
     }
 
     // --- User Profiles ---

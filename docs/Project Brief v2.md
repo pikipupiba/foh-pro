@@ -143,21 +143,22 @@
 ## **7. Rendering Approach**
 
 - **Goal**: Build a performant, modern web app that handles both **public-facing** content (informational/marketing) and **private, real-time portals** (customer/employee/admin).
-- **Scope**: FOH-PRO requires SSG/SSR for SEO-critical or public pages and SPA for feature-rich, user-specific dashboards.
+- **Scope**: FOH-PRO uses Next.js App Router with a mix of rendering strategies for different parts of the application.
 
 1. **Static Site Generation (SSG)**
-    - **Pages**: Home, About, Services Overview, FAQ, Blog
+    - **Routes**: Home, About, Contact, Services Overview, FAQ, Blog
     - **Rationale**: Content changes infrequently; SSG provides fast load times and strong SEO.
-    - **Implementation**: Incremental Static Regeneration to update pages upon content edits.
-        
+    - **Implementation**: Static rendering with optional Incremental Static Regeneration to update pages upon content edits.
+
 2. **Server-Side Rendering (SSR)**
-    - **Pages**: Product/Service Listings, Event Showcases, Dynamic Public Portfolios
+    - **Routes**: Product/Service Listings, Event Showcases, Dynamic Public Portfolios
     - **Rationale**: Must remain SEO-accessible but contain frequently updated data (e.g., availability, pricing, event updates).
-    - **Implementation**: Real-time data fetched on each request; the server pre-renders HTML before sending to the client.
-        
-3. **Single-Page Application (SPA)**
-    - **Portals**: Customer Portal, Employee Portal, Admin Portal
+    - **Implementation**: Dynamic rendering with server components that fetch data at request time.
+
+3. **Client-Side Rendering (CSR)**
+    - **Portals**: Customer Dashboard, Employee Portal, Admin Portal
     - **Rationale**: Highly interactive, real-time features (live chat, push notifications, role-based dashboards).
+    - **Implementation**: Client components with 'use client' directive for interactive features.
 
 ## **8. Development Philosophies**
 
@@ -229,6 +230,6 @@ Make it fast and easy to get help at any stage. Build support into every screen 
 
 ---
 
-**Project Lead:** Cosmo  
-**Date:** March 2025  
+**Project Lead:** Cosmo
+**Date:** March 2025
 **Status:** Planning Phase 🚀

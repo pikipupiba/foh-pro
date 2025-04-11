@@ -32,12 +32,12 @@ Below is a **sample `README.md`** you can use as a starting point for your **foh
 The **foh-pro** web application includes:
 
 1. **Marketing & Public-Facing Pages**
-   - Static/Server-Side Generated pages for SEO (Home, Services, Product Listings).
-2. **Customer Portal (SPA)**
+   - Static/Server-Side Generated routes for SEO (Home, About, Contact, Services, Product Listings).
+2. **Customer Dashboard (Client Components)**
    - Booking tools, event planning, live chat, social media integration, and more.
-3. **Employee Portal (SPA)**
+3. **Employee Portal (Client Components)**
    - Task assignments, equipment checklists, time tracking, and on-site support tools.
-4. **Admin Portal (SPA)**
+4. **Admin Portal (Client Components)**
    - Financial insights, employee scheduling, risk analysis, live event monitoring, and inventory restocking.
 
 All portals integrate with third-party services like **Current RMS**, **QuickBooks/Xero**, **DocuSign**, **Google Workspace**, and **social media platforms** for a holistic event production workflow.
@@ -59,11 +59,13 @@ All portals integrate with third-party services like **Current RMS**, **QuickBoo
 | Layer                       | Technology                                                                                                          |
 | --------------------------: | :------------------------------------------------------------------------------------------------------------------ |
 | **BaaS**                    | Firebase (Firestore, Auth, Storage, Cloud Functions, etc.)                                                          |
-| **Frontend**                | Next.js (React.js), Tailwind CSS, Zustand (state management), Framer Motion                                         |
+| **Frontend**                | Next.js 15+ (App Router), React.js 19+, Tailwind CSS v4, Zustand v5.0.3 (state management), Framer Motion v12.6.2  |
 | **Payments**                | Stripe, PayPal, QuickBooks API, Cash App, Venmo, Zelle, ACH, Apple Pay, Google Pay, Cryptocurrency                   |
 | **Version Control**         | GitHub (with GitHub Actions for CI/CD)                                                                              |
 
 **Note**: You can swap or integrate other services/tools depending on your requirements.
+
+> **App Router Migration**: This project has been migrated from Next.js Pages Router to App Router structure for improved performance, better code organization, and access to React Server Components.
 
 ---
 
@@ -77,7 +79,15 @@ foh-pro/
 ├── docs/                       # Architecture diagrams, design assets, requirements
 ├── public/                     # Static assets (images, favicon, etc.)
 ├── src/
-│   ├── pages/                  # Next.js routing (SSG/SSR)
+│   ├── app/                    # Next.js App Router (routes, layouts, pages)
+│   │   ├── layout.tsx          # Root layout
+│   │   ├── page.tsx            # Home page
+│   │   ├── about/              # About page
+│   │   ├── contact/            # Contact page
+│   │   ├── login/              # Login page
+│   │   ├── dashboard/          # Dashboard (client component)
+│   │   ├── admin/              # Admin portal (client component)
+│   │   └── employee/           # Employee portal (client component)
 │   ├── features/               # Domain-specific portals/features
 │   ├── components/             # Shared, reusable UI components
 │   ├── hooks/                  # Custom React hooks

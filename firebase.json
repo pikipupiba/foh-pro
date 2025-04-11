@@ -7,7 +7,7 @@
     {
       "source": "functions",
       "codebase": "default",
-      "runtime": "nodejs22",
+      "runtime": "nodejs20",
       "ignore": [
         "node_modules",
         ".git",
@@ -31,13 +31,11 @@
       "**/src/**",
       "**/functions/**"
     ],
-    "cleanUrls": true,
-    "rewrites": [
-      {
-        "source": "**",
-        "function": "nextApp"
-      }
-    ]
+    "frameworksBackend": {
+      "region": "us-central1",
+      "invoker": "public"
+    },
+    "cleanUrls": true
   },
   "storage": {
     "rules": "storage.rules"
@@ -64,4 +62,3 @@
     "singleProjectMode": true
   }
 }
-

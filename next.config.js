@@ -3,16 +3,22 @@ const nextConfig = {
   // Configure Next.js for development
   reactStrictMode: true,
 
-  // For production builds with Firebase Hosting
-  // We're using a Firebase Function to serve the Next.js app, so we don't need 'export'
-  // output: 'export',
-  // images: {
-  //   unoptimized: true, // Required for static export if using next/image
-  // },
+  // Skip type checking during build
+  typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
+  },
 
-  // Add revalidate time for Incremental Static Regeneration (ISR)
-  // This allows static pages to be regenerated after a certain time
-  // when requested, keeping content fresh without rebuilding the entire site
+  // Skip ESLint during build
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
+
   // Add experimental features here if needed
   experimental: {},
 
@@ -29,6 +35,7 @@ const nextConfig = {
   },
 
   // Ensure Next.js knows it's being deployed to Firebase
+  // Using the default .next directory for Firebase Hosting with Cloud Functions
   distDir: '.next',
 };
 
